@@ -61,16 +61,18 @@ window {
   margin: 0px;
   padding: 10px;
   border: 2px solid @lavender;
-  border-radius: 8px;
-  background-color: @base;
+  border-radius: 12px;
+  background-color: rgba(30, 30, 46, 0.7); /* semi-transparent base */
 }
+
 
 /* Inner Box */
 #inner-box {
   margin: 5px;
   padding: 10px;
   border: none;
-  background-color: @base;
+  background-color: rgba(30, 30, 46, 0.0); /* Set to completely transparent */
+  
 }
 
 /* Outer Box */
@@ -78,7 +80,7 @@ window {
   margin: 5px;
   padding: 10px;
   border: none;
-  background-color: @base;
+  background-color: rgba(30, 30, 46, 0.0); /* Set to completely transparent */
 }
 
 /* Scroll */
@@ -86,8 +88,8 @@ window {
   margin: 0px;
   padding: 10px;
   border: none;
-  background-color: @base;
-}
+  background-color: rgba(30, 30, 46, 0.0); /* Set to completely transparent */
+  }
 
 /* Input */
 #input {
@@ -96,8 +98,8 @@ window {
   border: none;
   border-radius: 0.1em;
   color: @text;
-  background-color: @base;
-}
+  background-color: rgba(30, 30, 46, 0.7);
+  }
 
 #input image {
     border: none;
@@ -113,11 +115,12 @@ window {
   margin: 5px;
   border: none;
   color: @text;
+  background-color: rgba(30, 30, 46, 0.0); /* Set to completely transparent */
 }
 
 #entry {
-  background-color: @base;
-}
+  background-color: rgba(30, 30, 46, 0.0); /* Use a transparent color here */
+  }
 
 #entry arrow {
   border: none;
