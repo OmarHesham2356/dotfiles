@@ -8,7 +8,7 @@
 }
 
 window#waybar {
-    background: rgba(24, 24, 37, 0.4); /* Catppuccin-like color but with transparency */
+    background: rgba(24, 24, 37, 0.0); /* Catppuccin-like color but with transparency */
     color: @overlay0;
     transition: background-color 0.1s ease;
     border-bottom: 1px solid rgba(108, 112, 134, 0.5);
@@ -166,3 +166,55 @@ button:hover {
     padding-left: 6px;
     padding-right: 6px;
 }
+
+
+
+/* Make each module look like a separate rectangle */
+#workspaces,
+#pulseaudio,
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#wireplumber,
+#tray,
+#network,
+#mode,
+#scratchpad,
+#custom-vpn,
+#custom-clipboard,
+#custom-keyboard,
+#custom-power {
+    background: rgba(49, 50, 68, 0.6);  /* semi-transparent Catppuccin tone */
+    border-radius: 10px;
+    margin: 4px 6px;
+    padding: 6px 10px;
+    border: 1px solid rgba(108, 112, 134, 0.3);
+    transition: all 0.2s ease;
+}
+
+/* Hover effect for a soft glow */
+#pulseaudio:hover,
+#clock:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#disk:hover,
+#temperature:hover,
+#backlight:hover,
+#wireplumber:hover,
+#tray:hover,
+#network:hover,
+#mode:hover,
+#scratchpad:hover,
+#custom-vpn:hover,
+#custom-clipboard:hover,
+#custom-keyboard:hover,
+#custom-power:hover {
+    background: rgba(108, 112, 134, 0.3);
+    box-shadow: 0 0 5px rgba(108, 112, 134, 0.4);
+}
+
