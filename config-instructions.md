@@ -44,7 +44,7 @@ This folder contains all Waybar configuration files, themes, modules, and script
 
 ```
 
-.
+```.
 ├── **colors.css** — global color definitions
 ├── **modules.json** — defines Waybar modules
 ├── **launch.sh** — script to start Waybar
