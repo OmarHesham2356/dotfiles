@@ -1,5 +1,5 @@
 /* Import Matugen generated colors */
-@import 'colors.css';
+@import '../../colors.css';
 
 /* === Derived dynamic colors === */
 @define-color base alpha(@surface, 0.5);
@@ -28,8 +28,7 @@
 
 /* === Control Center Container === */
 .control-center {
-  background: alpha(@surface, 0.7); /* Slightly see-through to let the blur show */
-  backdrop-filter: blur(25px) brightness(1.1) saturate(1.2);      /* ← Adds the blur */
+  background: @base;
   border-radius: 10px;
   border: 2px solid @bordercolor;
   padding: 8px 8px 0 8px;

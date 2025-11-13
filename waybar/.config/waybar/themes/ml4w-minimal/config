@@ -53,22 +53,23 @@
     ],
     // Modules Center
     "modules-center": [
-        "hyprland/window",
+       // "hyprland/window",
+        "clock",
         "custom/empty"
     ],
     // Modules Right    
     "modules-right": [
-        "custom/updates",
+       // "custom/updates",
         "pulseaudio",
-        //"backlight",
+        "backlight",
         "bluetooth",
         "network",
         "battery",
         "power-profiles-daemon",
+        "hyprland/language",
         "group/hardware",
         "group/tools",
         "custom/exit",
-        "clock",
         "tray",
         "custom/notification",
         "custom/ml4w-welcome"

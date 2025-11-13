@@ -1,1 +1,1 @@
-/ml4w-modern;/ml4w-modern/default
+/ml4w-minimal;/ml4w-minimal
