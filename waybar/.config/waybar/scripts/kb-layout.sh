@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Get the active keymap name for the 'main: yes' keyboard
-layout_name=$(hyprctl devices -j | jq -r '.keyboards[] | select(.main == true) | .active_keymap')
+# Get keyboard layouts from niri and find the active one (marked with '*')
+active_layout=$(niri msg keyboard-layouts | grep -E '^\s*\*' | head -n1)
 
-# Case statement to return the desired abbreviation
-case "$layout_name" in
-    "English (US)")
-        echo "US"
-        ;;
-    "Arabic")
-        echo "AR"
-        ;;
-    *)
-        # Fallback for any other names
-        echo "$layout_name"
-        ;;
+# Extract the layout name and convert to code
+case "$active_layout" in
+*"English (US)"*)
+  echo "US"
+  ;;
+*"Arabic"*)
+  echo "AR"
+  ;;
+*)
+  # Fallback: if parsing fails, show a question mark
+  echo "??"
+  ;;
 esac

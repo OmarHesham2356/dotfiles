@@ -1,0 +1,24 @@
+[config]
+default_prefix = '@'
+
+[templates.waybar]
+input_path = '/home/omarh/.config/matugen/templates/colors.css'
+output_path = '/home/omarh/.config/waybar/colors.css'
+post_hook = 'sh -c "pkill -SIGUSR2 waybar || true"'
+
+[templates.ghostty]
+input_path = '/home/omarh/.config/matugen/templates/ghostty-colors'
+output_path = '/home/omarh/.config/ghostty/theme'
+# Ghostty reloads config on SIGUSR2
+post_hook = 'sh -c "pkill -SIGUSR2 ghostty || true"'
+
+[templates.neovim]
+input_path = '/home/omarh/.config/matugen/templates/colors.lua'
+output_path = '/home/omarh/.config/nvim/lua/matugen_colors.lua'
+# No post_hook needed usually, as Neovim reads this on launch
+
+[templates.mako]
+input_path = '/home/omarh/.config/matugen/templates/mako-colors'
+output_path = '/home/omarh/.config/mako/mako-colors'
+# Signal mako to reload the configuration file immediately
+post_hook = 'makoctl reload'

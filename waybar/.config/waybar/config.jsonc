@@ -1,125 +1,105 @@
 {
   "position": "top",
-
-  "modules-left": ["hyprland/workspaces","cpu","memory"],
-  "modules-center": ["clock"],
-  "modules-right": ["network", "pulseaudio", "battery", "backlight", "custom/keyboard", "custom/clipboard", "tray", "custom/power"],
-
+  "layer": "top",
+  "height": 24,
+  "spacing": 4,
+  "modules-left": [
+    "niri/workspaces"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "network",
+    "pulseaudio",
+    "backlight",
+    "battery",
+    "custom/clipboard",
+    "custom/keyboard",
+    "tray",
+    "custom/power"
+  ],
   "clock": {
-    "format": "<span foreground='#f5c2e7'>   </span>{:%a %d %I:%M %p}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "calendar": {
-    "mode": "month",          // show month view
-    "mode-mon-col": 3,        // number of months in a row if you want multiple months
-    "weeks-pos": "right",
-    "on-scroll": 1,           // scroll between months
-    "format": {
-        "months":   "<span color='#ffead3'><b>{}</b></span>",
-        "days":     "<span color='#ecc6d9'><b>{}</b></span>",
-        "weeks":    "<span color='#009999'><b>W{}</b></span>",
-        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
-        "today":    "<span color='#ff6699'><b><u>{}</u></b></span>"
-    }
-},
-
-    "actions": {
-    "on-click": "toggle",        // click clock to show/hide calendar
-    "on-scroll-up": "shift_up",  // scroll to move forward
-    "on-scroll-down": "shift_down"
-},
-
-    "interval": 60
+    "format": "{:%I:%M %p}",
+    "interval": 60,
+    "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>"
   },
-
-  "battery": {
-    "states": {
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "<span size='13000' foreground='#a6e3a1'>{icon} </span> {capacity}%",
-    "format-warning": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {capacity}%",
-    "format-critical": "<span size='13000' foreground='#E38C8F'>{icon} </span> {capacity}%",
-    "format-charging": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-plugged": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {time}",
-    "format-full": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-icons": ["", "", "", "", ""],
-    "tooltip-format": "{time}"
-  },
-
-  "network": {
-    "format-wifi": "<span size='13000' foreground='#ffffff'>  </span>{essid}",
-    "format-ethernet": "<span size='13000' foreground='#ffffff'>    </span> Disconnected",
-    "format-linked": "{ifname} (No IP) ",
-    "format-disconnected": "<span size='13000' foreground='#ffffff'>  </span>Disconnected",
-    "tooltip-format-wifi": "Signal Strength: {signalStrength}%"
-  },
-
-  "pulseaudio": {
-    "format": "<span size='13000' foreground='#ffffff'>{icon}</span> {volume}%",
-    "format-muted": "<span size='13000' foreground='#ffffff'></span>",
+  "niri/workspaces": {
+    "format": "{icon}",
     "format-icons": {
-      "default": ["", "", " "]
+      "1": "󰎤",
+      "2": "󰎧",
+      "3": "󰎪",
+      "4": "󰎭",
+      "5": "󰎱",
+      "6": "󰎳",
+      "7": "󰎶",
+      "8": "󰎹",
+      "9": "󰎼",
+      "default": "◇",
+      "active": "󰝦",
+      "focused": "󰮯",
+      "urgent": "󰇙"
     },
+    "current-only": false,
+    "on-click": "activate"
+  },
+  "network": {
+    "format-wifi": "",
+    "format-disconnected": "",
+    "format-disabled": "󰖪",
+    "interval": 5,
+    "tooltip-format-wifi": "{essid} - {signalStrength}%",
+    "tooltip-format-disconnected": "Disconnected",
+    "tooltip-format-disabled": "WIFI Disabled",
+    "on-click": "nmgui"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
     "on-click": "pavucontrol"
   },
-
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ]
+  },
   "custom/clipboard": {
-    "format": "",
-    "return-type": "json",
+    "format": "",
     "exec": "~/.config/waybar/scripts/clipboard.sh",
-    "interval": 5,
-    "format-icons": {
-      "empty": "<span size='13000' foreground='#ffffff'></span>",
-      "full": "<span size='13000' foreground='#a6e3a1'></span>"
-    },
-    "tooltip": true,
-    "on-click": "bash -c 'cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy'"
+    "interval": 5
   },
-
-  "custom/keyboard": {
-    "format": "<span size='13000' foreground='#ffffff'> </span> {}",
-    "exec": "~/.config/waybar/scripts/kb-layout.sh",
-    "interval": 1
-  },
-
   "custom/power": {
-    "format": "<span size='13000' foreground='#f38ba8'> </span>",
-    "tooltip": false,
+    "format": "",
     "on-click": "wlogout"
   },
-
   "tray": {
-    "icon-size": 20,
-    "spacing": 10
+    "icon-size": 16,
+    "spacing": 8
   },
-
-  "cpu": {
-    "format": "<span size='13000' foreground='#ffffff'> </span> {usage}%",
-    "tooltip": true,
-    "interval": 2
-   },
-
-"memory": {
-    // Fixed: Added span around the icon for correct sizing and color
-    "format": "<span size='13000' foreground='#ffffff'>  </span> {used}/{total}GB",
-    "tooltip": true,
-    "interval": 5
-},
-
-   "temperature": {
-    // Fixed: Added span around the icon for correct sizing and color
-    "format": "<span size='13000' foreground='#ffb26b'>  </span> {temperature}°C",
-    "tooltip": true,
-    "interval": 5
-},
-   "backlight": {
-    "format": "<span size='13000' foreground='#ffffff'>{icon} </span> {percent}%",
-    "format-icons": ["", "", ""],
-    "tooltip": true,
-    "on-scroll-up": "brightnessctl set +5%",
-    "on-scroll-down": "brightnessctl set 5-%",
-    "on-click": "brightnessctl set 50%",
-    "on-click-right": "brightnessctl set 100%"
+  "custom/keyboard": {
+    "format": "󰌌 {}",
+    "exec": "~/.config/waybar/scripts/kb-layout.sh",
+    "interval": 1,
+    "return-type": "text",
+    "tooltip": "Keyboard Layout: {}",
+    "on-click": "notify-send 'Keyboard' 'Current layout is {}'"
   }
 }

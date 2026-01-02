@@ -1,112 +1,161 @@
-@import "mocha.css";
+@import "colors.css";
 
-/* === Base styling === */
+/* Base Styles */
 * {
-  font-family: "MesloLGS Nerd Font Mono Bold";
-  font-size: 15px;  /* slightly smaller for a cleaner look */
-  font-weight: bold;
+    font-family: "MesloLGS Nerd Font", monospace;
+    font-size: 13px;
+    min-height: 0;
+    font-weight: 500;
 }
 
 window#waybar {
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent black for contrast */
-  color: #ffffff; /* white text */
-  transition: background-color 0.1s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    background: @surface;
+    color: @on_surface;
+    border-bottom: 1px solid @primary;
 }
 
-/* === Buttons === */
-button {
-  border: none;
-  border-radius: 5px;
-  box-shadow: inset 0 -2px transparent;
+/* Container Spacing */
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 0 4px;
 }
 
-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border-top: 2px solid #ffffff;
+/* Workspaces */
+#workspaces {
+    margin: 0;
+    padding: 0;
 }
 
-/* === Workspaces === */
 #workspaces button {
-  padding: 0 5px;
+    padding: 0 10px;
+    color: @on_surface;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 14px;
+    opacity: 0.6; /* Inactive workspace opacity */
 }
 
-#workspaces button.focused {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border-top: 2px solid #ffffff;
+#workspaces button:hover {
+    background: @surface;
+    color: @primary;
+    opacity: 1;
 }
 
 #workspaces button.active {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #cccccc;
-  border-top: 2px solid #cccccc;
+    color: @primary;
+    background: @surface;
+    opacity: 1;
+}
+
+#workspaces button.focused {
+    color: @primary;
+    background: @surface;
+    border-top: 2px solid @primary;
+    opacity: 1;
 }
 
 #workspaces button.urgent {
-  background-color: #ff5555;
+    color: @on_surface;
+    opacity: 1;
 }
 
-/* === Modules appearance === */
-#workspaces,
-#pulseaudio,
+/* All Modules */
 #clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#wireplumber,
-#tray,
 #network,
-#mode,
-#scratchpad,
-#custom-vpn,
+#pulseaudio,
+#battery,
+#backlight,
+#tray,
 #custom-clipboard,
 #custom-keyboard,
-#custom-power {
-  background: rgba(30, 30, 30, 0.6); /* dark translucent blocks */
-  border-radius: 8px;
-  margin: 3px 5px;
-  padding: 5px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
+#custom-power,
+#cpu,
+#memory {
+    padding: 0 10px;
+    margin: 0 2px;
+    border-radius: 0;
 }
 
-/* Hover effect */
-#workspaces:hover,
-#pulseaudio:hover,
-#clock:hover,
-#battery:hover,
-#cpu:hover,
-#memory:hover,
-#disk:hover,
-#temperature:hover,
-#backlight:hover,
-#wireplumber:hover,
-#tray:hover,
+/* Specific Module Colors */
+#clock {
+    color: @secondary;
+    font-weight: bold;
+}
+
+#network {
+    color: @primary;
+}
+
+#network.disconnected {
+    color: @on_surface;
+    opacity: 0.5;
+}
+
+#network.disabled {
+    color: @on_surface;
+    opacity: 0.5;
+}
+
+#pulseaudio {
+    color: @primary;
+}
+
+#pulseaudio.muted {
+    color: @on_surface;
+    opacity: 0.5;
+}
+
+#battery {
+    color: @primary;
+}
+
+#battery.charging {
+    color: @secondary;
+}
+
+#backlight {
+    color: @primary;
+}
+
+#cpu {
+    color: @primary;
+}
+
+#memory {
+    color: @primary;
+}
+
+/* Custom Modules */
+#custom-clipboard {
+    color: @primary;
+}
+
+#custom-keyboard {
+    color: @primary;
+    border-bottom: 2px solid @primary;
+}
+
+#custom-power {
+    color: @primary;
+}
+
+/* Tray */
+#tray {
+    padding: 0;
+    margin: 0 6px;
+}
+
+/* Hover Effects */
 #network:hover,
-#mode:hover,
-#scratchpad:hover,
-#custom-vpn:hover,
+#pulseaudio:hover,
+#battery:hover,
+#backlight:hover,
 #custom-clipboard:hover,
 #custom-keyboard:hover,
-#custom-power:hover {
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+#custom-power:hover,
+#cpu:hover,
+#memory:hover {
+    background: @surface;
 }
-
-/* === Module accents === */
-#clock { color: #ffffff; }
-#pulseaudio { color: #cccccc; }
-#network { color: #ffffff; }
-#battery { color: #a6e22e; } /* green for battery */
-#backlight { color: #ffffff; }
-#custom-clipboard { color: #ffffff; }
-#custom-keyboard { color: #ffffff; }
-#custom-power { color: #ff5555; }
-#cpu { color: #ffffff; }
-#memory { color: #ffffff; }
-#temperature { color: #ffcc00; } /* yellow for temp */
