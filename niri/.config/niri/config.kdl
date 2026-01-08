@@ -2,7 +2,7 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
-
+include "/home/omarh/.config/niri/colors.kdl"
 
 workspace "1" {
     open-on-output "DP-1"
@@ -176,9 +176,9 @@ layout {
         urgent-color   "#cc4444"      // Softer red
     }
     focus-ring {
-        width 2
-        active-color   "#808080"      // Medium gray
-        inactive-color "#505050"      // Dark gray
+        width 3
+       // active-color   "#808080"      // Medium gray
+       // inactive-color "#505050"      // Dark gray
     }
     shadow {
         softness 30
@@ -332,7 +332,7 @@ window-rule {
     open-floating true
 }
 window-rule {
-    geometry-corner-radius 0
+    geometry-corner-radius 16
     clip-to-geometry true
 }
 
@@ -351,6 +351,26 @@ window-rule {
   open-on-output "DP-1"
 }
 
+window-rule {
+    // Match the custom ID you will use in the keybind
+    match app-id="com.mitchellh.ghostty.floating"
+
+    // Force it to open as a floating window
+    open-floating true
+
+    // Define the "showoff" center size (e.g., 70% width, 60% height)
+    default-column-width { fixed 800; }
+    default-window-height { fixed 500; }
+
+    // Optional: Add a shadow to make it pop against background windows
+    shadow {
+        softness 30
+        spread 5
+        offset x=0 y=10
+        color "#00000070"
+    }
+}
+
 binds {
     // === referesh niri config ===
     Mod+Alt+R { spawn "niri" "msg" "action" "reload-config"; }
@@ -362,7 +382,10 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+E hotkey-overlay-title="Open File Manager: yazi" { spawn "ghostty" "-e" "yazi"; }
 
-
+    //ScreenShot Tool
+    Mod+Shift+S {
+      screenshot;
+    }
     // Open Zen Browser
     Mod+B hotkey-overlay-title="Open Firefox Browser: Zen Browser" { spawn "zen-browser"; }
 
@@ -382,8 +405,11 @@ binds {
     }
 
 
+    Mod+P{
+      spawn "wlogout"
+    }
     
-   
+    Mod+Shift+Q { spawn "ghostty" "--class=com.mitchellh.ghostty.floating"; } 
    
        // === Security ===
    

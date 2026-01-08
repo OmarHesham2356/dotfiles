@@ -1,0 +1,14 @@
+// ~/.config/matugen/templates/niri-colors.kdl
+
+layout {
+    focus-ring {
+        // Use "hex" to get the #RRGGBB format
+        active-color "{{colors.primary.default.hex}}"
+        inactive-color "{{colors.surface_variant.default.hex}}"
+    }
+
+    border {
+        active-color "{{colors.primary.default.hex}}"
+        inactive-color "{{colors.surface_variant.default.hex}}"
+    }
+}

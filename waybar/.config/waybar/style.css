@@ -2,57 +2,82 @@
 
 /* Base Styles */
 * {
-    font-family: "MesloLGS Nerd Font", monospace;
-    font-size: 13px;
+    /* JetBrainsMono is excellent for icon alignment. 
+       If you don't have it, "Symbols Nerd Font" works too. */
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 12px;
     min-height: 0;
-    font-weight: 500;
 }
 
+/* 1. The main window canvas - Make it invisible */
 window#waybar {
+    background-color: transparent; /* Fixes the black corners */
+    border: none;
+    /* Keeps the font settings from the global * block */
+}
+
+/* 2. The container inside - Apply styles here */
+window#waybar > box {
     background: @surface;
     color: @on_surface;
-    border-bottom: 1px solid @primary;
+    
+    /* Your styling moved here */
+    border: 2px solid @primary;
+    border-radius: 12px;
+    opacity: 0.95;
+    
+    /* Ensure it fits nicely */
+    margin: 0px; 
+    padding: 0px;
 }
 
-/* Container Spacing */
-.modules-left,
-.modules-center,
-.modules-right {
-    padding: 0 4px;
-}
-
-/* Workspaces */
+/* Workspaces - Clean, minimal */
 #workspaces {
-    margin: 0;
+    margin: 6px 0 10px 0;
     padding: 0;
 }
 
 #workspaces button {
-    padding: 0 10px;
+    padding: 0;
+    /* Left Margin: 5px 
+       Right Margin: 8px 
+       Border-Left: 3px 
+       Result: (5px margin + 3px border) = 8px total space on left.
+       This matches the 8px margin on the right, keeping the icon dead center.
+    */
+    margin: 3px 8px 3px 5px; 
+    
     color: @on_surface;
     background: transparent;
-    border: none;
+    
+    /* Forces the border to be a straight line */
     border-radius: 0;
-    font-size: 14px;
-    opacity: 0.6; /* Inactive workspace opacity */
+    
+    /* Reserve space for the line with transparent color */
+    border-left: 3px solid transparent;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    
+    font-size: 16px;
+    opacity: 0.6;
+    transition: all 0.2s ease; /* Optional: Makes the hover effect smooth */
 }
 
 #workspaces button:hover {
-    background: @surface;
     color: @primary;
-    opacity: 1;
+    opacity: 0.8;
+    border-left: 3px solid @primary;
 }
 
 #workspaces button.active {
     color: @primary;
-    background: @surface;
     opacity: 1;
 }
 
 #workspaces button.focused {
     color: @primary;
-    background: @surface;
-    border-top: 2px solid @primary;
+    border-left: 3px solid @primary;
     opacity: 1;
 }
 
@@ -61,90 +86,74 @@ window#waybar {
     opacity: 1;
 }
 
-/* All Modules */
+/* All Modules - Consistent styling */
 #clock,
+#custom-keyboard,
+#custom-clipboard,
+#backlight,
+#pulseaudio,
+#custom-mako,
+#battery,
+#network,
+#tray,
+#custom-power {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    
+    /* REMOVE side margins completely to let the bar center the text */
+    margin-left: 0px;
+    margin-right: 0px;
+    
+    /* Use padding to create the hover effect box size instead */
+    padding-left: 4px;
+    padding-right: 4px;
+    
+    color: @primary;
+}
+
+/* Specific fix for the Clock (it is wider than icons) */
+#clock {
+    color:@secondary;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 15px; 
+    /* Optional: reduce clock font slightly if it still cuts off */
+}
+
+/* System Icons */
 #network,
 #pulseaudio,
+#custom-mako,
 #battery,
 #backlight,
-#tray,
 #custom-clipboard,
-#custom-keyboard,
-#custom-power,
-#cpu,
-#memory {
-    padding: 0 10px;
-    margin: 0 2px;
-    border-radius: 0;
-}
-
-/* Specific Module Colors */
-#clock {
-    color: @secondary;
-    font-weight: bold;
-}
-
-#network {
-    color: @primary;
-}
-
-#network.disconnected {
-    color: @on_surface;
-    opacity: 0.5;
-}
-
-#network.disabled {
-    color: @on_surface;
-    opacity: 0.5;
-}
-
-#pulseaudio {
-    color: @primary;
-}
-
-#pulseaudio.muted {
-    color: @on_surface;
-    opacity: 0.5;
-}
-
-#battery {
-    color: @primary;
-}
-
-#battery.charging {
-    color: @secondary;
-}
-
-#backlight {
-    color: @primary;
-}
-
-#cpu {
-    color: @primary;
-}
-
-#memory {
-    color: @primary;
-}
-
-/* Custom Modules */
-#custom-clipboard {
-    color: @primary;
-}
-
-#custom-keyboard {
-    color: @primary;
-    border-bottom: 2px solid @primary;
-}
-
 #custom-power {
     color: @primary;
+    /* 14px fits much better in a 32px bar than 16px */
+    font-size: 14px; 
 }
 
-/* Tray */
-#tray {
-    padding: 0;
-    margin: 0 6px;
+/* Keyboard */
+#custom-keyboard {
+    color: @primary;
+    font-size: 16px;
+}
+
+/* Network States */
+#network.disconnected {
+    color: @on_surface;
+    opacity: 0.4;
+}
+
+/* Pulseaudio Muted */
+#pulseaudio.muted {
+    color: @on_surface;
+    opacity: 0.4;
+}
+
+/* Battery Charging */
+#battery.charging {
+    color: @secondary; /* Changed back to @secondary for visibility */
 }
 
 /* Hover Effects */
@@ -154,8 +163,6 @@ window#waybar {
 #backlight:hover,
 #custom-clipboard:hover,
 #custom-keyboard:hover,
-#custom-power:hover,
-#cpu:hover,
-#memory:hover {
-    background: @surface;
+#custom-power:hover {
+    color: @secondary;
 }

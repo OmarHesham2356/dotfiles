@@ -22,3 +22,8 @@ input_path = '/home/omarh/.config/matugen/templates/mako-colors'
 output_path = '/home/omarh/.config/mako/mako-colors'
 # Signal mako to reload the configuration file immediately
 post_hook = 'makoctl reload'
+
+[templates.niri]
+input_path = '/home/omarh/.config/matugen/templates/niri-colors.kdl'
+output_path = '/home/omarh/.config/niri/colors.kdl'
+# Niri automatically watches included files, so no post_hook is strictly needed,

@@ -1,0 +1,14 @@
+// ~/.config/matugen/templates/niri-colors.kdl
+
+layout {
+    focus-ring {
+        // Use "hex" to get the #RRGGBB format
+        active-color "#bcc2ff"
+        inactive-color "#46464f"
+    }
+
+    border {
+        active-color "#bcc2ff"
+        inactive-color "#46464f"
+    }
+}
