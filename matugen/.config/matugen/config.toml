@@ -27,3 +27,17 @@ post_hook = 'makoctl reload'
 input_path = '/home/omarh/.config/matugen/templates/niri-colors.kdl'
 output_path = '/home/omarh/.config/niri/colors.kdl'
 # Niri automatically watches included files, so no post_hook is strictly needed,
+
+[templates.hyprland]
+input_path = '/home/omarh/.config/matugen/templates/hyprland-colors.conf'
+output_path = '/home/omarh/.config/hypr/colors.conf'
+post_hook = 'hyprctl reload'
+
+[templates.hyprlock]
+input_path = '/home/omarh/.config/matugen/templates/hyprlock-colors.conf'
+output_path = '/home/omarh/.config/hypr/hyprlock-colors.conf'
+# No post_hook is needed because hyprlock reads the config every time it starts.
+
+[templates.wlogout]
+input_path = '/home/omarh/.config/matugen/templates/wlogout.css'
+output_path = '/home/omarh/.config/wlogout/style.css'

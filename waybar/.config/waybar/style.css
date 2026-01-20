@@ -1,168 +1,82 @@
 @import "colors.css";
 
-/* Base Styles */
 * {
-    /* JetBrainsMono is excellent for icon alignment. 
-       If you don't have it, "Symbols Nerd Font" works too. */
     font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: bold;
     min-height: 0;
 }
 
-/* 1. The main window canvas - Make it invisible */
+/* 1. Transparent Bar */
 window#waybar {
-    background-color: transparent; /* Fixes the black corners */
-    border: none;
-    /* Keeps the font settings from the global * block */
+    background-color: transparent;
+    border-bottom: none;
+    color: #ffffff;
+    transition-property: background-color;
+    transition-duration: .5s;
 }
 
-/* 2. The container inside - Apply styles here */
-window#waybar > box {
-    background: @surface;
-    color: @on_surface;
-    
-    /* Your styling moved here */
-    border: 2px solid @primary;
-    border-radius: 12px;
-    opacity: 0.95;
-    
-    /* Ensure it fits nicely */
-    margin: 0px; 
-    padding: 0px;
-}
-
-/* Workspaces - Clean, minimal */
+/* 2. Workspaces (Pill Container) */
 #workspaces {
-    margin: 6px 0 10px 0;
-    padding: 0;
+    background-color: @surface;
+    color: @on_surface;
+    margin: 4px 4px;
+    padding: 5px 5px;
+    border-radius: 24px;
 }
 
 #workspaces button {
-    padding: 0;
-    /* Left Margin: 5px 
-       Right Margin: 8px 
-       Border-Left: 3px 
-       Result: (5px margin + 3px border) = 8px total space on left.
-       This matches the 8px margin on the right, keeping the icon dead center.
-    */
-    margin: 3px 8px 3px 5px; 
-    
-    color: @on_surface;
-    background: transparent;
-    
-    /* Forces the border to be a straight line */
-    border-radius: 0;
-    
-    /* Reserve space for the line with transparent color */
-    border-left: 3px solid transparent;
-    border-top: none;
-    border-right: none;
-    border-bottom: none;
-    
-    font-size: 16px;
-    opacity: 0.6;
-    transition: all 0.2s ease; /* Optional: Makes the hover effect smooth */
+    padding: 0 10px;
+    background-color: transparent;
+    color: @secondary;
+    border-radius: 24px;
+    margin-right: 0px;
+    transition: all 0.3s ease;
 }
 
 #workspaces button:hover {
+    background: @surface_variant;
     color: @primary;
-    opacity: 0.8;
-    border-left: 3px solid @primary;
+    box-shadow: none;
 }
 
 #workspaces button.active {
-    color: @primary;
-    opacity: 1;
-}
-
-#workspaces button.focused {
-    color: @primary;
-    border-left: 3px solid @primary;
-    opacity: 1;
+    background-color: @primary;
+    color: @on_primary;
+    border-radius: 24px;
 }
 
 #workspaces button.urgent {
-    color: @on_surface;
-    opacity: 1;
+    background-color: @error;
+    color: @on_error;
 }
 
-/* All Modules - Consistent styling */
+/* 3. General Module Styling (The "Pill" Base) */
+/* This applies to everything generally */
 #clock,
-#custom-keyboard,
-#custom-clipboard,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
 #backlight,
+#network,
 #pulseaudio,
 #custom-mako,
-#battery,
-#network,
 #tray,
-#custom-power {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    
-    /* REMOVE side margins completely to let the bar center the text */
-    margin-left: 0px;
-    margin-right: 0px;
-    
-    /* Use padding to create the hover effect box size instead */
-    padding-left: 4px;
-    padding-right: 4px;
-    
-    color: @primary;
-}
-
-/* Specific fix for the Clock (it is wider than icons) */
-#clock {
-    color:@secondary;
-    margin-left: 0;
-    margin-right: 0;
-    font-size: 15px; 
-    /* Optional: reduce clock font slightly if it still cuts off */
-}
-
-/* System Icons */
-#network,
-#pulseaudio,
-#custom-mako,
-#battery,
-#backlight,
-#custom-clipboard,
-#custom-power {
-    color: @primary;
-    /* 14px fits much better in a 32px bar than 16px */
-    font-size: 14px; 
-}
-
-/* Keyboard */
-#custom-keyboard {
-    color: @primary;
-    font-size: 16px;
-}
-
-/* Network States */
-#network.disconnected {
-    color: @on_surface;
-    opacity: 0.4;
-}
-
-/* Pulseaudio Muted */
-#pulseaudio.muted {
-    color: @on_surface;
-    opacity: 0.4;
-}
-
-/* Battery Charging */
-#battery.charging {
-    color: @secondary; /* Changed back to @secondary for visibility */
-}
-
-/* Hover Effects */
-#network:hover,
-#pulseaudio:hover,
-#battery:hover,
-#backlight:hover,
-#custom-clipboard:hover,
-#custom-keyboard:hover,
-#custom-power:hover {
+#mode,
+#idle_inhibitor,
+#custom-power,
+#language {
+    background-color: @surface;
     color: @secondary;
+    padding: 5px 15px;
+    margin: 4px 3px;
+    border-radius: 24px;
 }
+
+/* 8. State Colors */
+#battery.charging { color: #a6e3a1; }
+#battery.warning { color: #fab387; }
+#battery.critical { color: #f38ba8; }
+#network.disconnected { color: #f38ba8; }

@@ -1,4 +1,5 @@
 command = direct:/usr/bin/zsh
+
 # Font Configuration
 font-size = 12
 
@@ -6,13 +7,22 @@ font-size = 12
 window-decoration = false
 window-padding-x = 12
 window-padding-y = 12
-background-opacity = 1.0
+background-opacity = 0.6 
 background-blur-radius = 32
-background-opacity = 0.8 
 
-# Cursor Configuration
+# --- Animated Cursor Configuration ---
+# Point to the absolute path of the shader you cloned
+custom-shader = "/home/omarh/ghostty-shaders/cursor_blaze.glsl"
+custom-shader-animation = true
+
+# Essential: shell-integration must NOT have 'no-cursor' for animations to work
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
 cursor-style = block
-cursor-style-blink = true
+cursor-style-blink = false  
+# Most shaders look better with blinking off
+# --------------------------------------
 
 # Scrollback
 scrollback-limit = 3023
@@ -22,32 +32,23 @@ mouse-hide-while-typing = true
 copy-on-select = false
 confirm-close-surface = false
 
-# Disable annoying copied to clipboard
+# Disable annoying notifications
 app-notifications = no-clipboard-copy,no-config-reload
 
-# Key bindings for common actions
-#keybind = ctrl+c=copy_to_clipboard
-#keybind = ctrl+v=paste_from_clipboard
+# Key bindings
 keybind = ctrl+shift+n=new_window
 keybind = ctrl+t=new_tab
 keybind = ctrl+plus=increase_font_size:1
 keybind = ctrl+minus=decrease_font_size:1
 keybind = ctrl+zero=reset_font_size
+keybind = shift+enter=text:\n
 
 # Material 3 UI elements
 unfocused-split-opacity = 0.7
 unfocused-split-fill = #44464f
 
-# Tab configuration
+# Other
 gtk-titlebar = false
-
-# Shell integration
-shell-integration = detect
-shell-integration-features = cursor,sudo,title,no-cursor
-keybind = shift+enter=text:\n
-
-# Rando stuff
 gtk-single-instance = true
-
-# Dank color generation
 config-file = theme
+

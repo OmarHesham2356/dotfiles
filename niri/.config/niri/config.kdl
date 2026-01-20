@@ -210,7 +210,6 @@ spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "-max-items" "1
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "-max-items" "20" "store"
 spawn-at-startup "waybar" 
 spawn-at-startup "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"
-spawn-at-startup "bash" "-c" "swayidle -w timeout 300 'hyprlock' before-sleep 'hyprlock'"
 spawn-at-startup "mako"
 spawn-sh-at-startup "swayidle -w"
 spawn-at-startup "swww-daemon";
@@ -332,7 +331,7 @@ window-rule {
     open-floating true
 }
 window-rule {
-    geometry-corner-radius 16
+    geometry-corner-radius 10
     clip-to-geometry true
 }
 
@@ -559,7 +558,6 @@ binds {
     Mod+Shift+7 { move-column-to-workspace 7; }
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
-
     // === Column Management ===
     Mod+BracketLeft  { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }

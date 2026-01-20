@@ -1,16 +1,16 @@
 # Material 3 mapping for Ghostty
-palette = 0=#131318
+palette = 0=#1a110f
 palette = 1=#ffb4ab
-palette = 2=#bcc2ff
-palette = 3=#c4c5dd
-palette = 4=#e6bad6
-palette = 5=#dfe0ff
-palette = 6=#e0e0f9
-palette = 7=#e4e1e9
+palette = 2=#ffb59f
+palette = 3=#e7bdb2
+palette = 4=#d8c68d
+palette = 5=#ffdbd1
+palette = 6=#ffdbd1
+palette = 7=#f1dfda
 
-background = #131318
-foreground = #e4e1e9
-cursor-color = #bcc2ff
-selection-background = #3b4279
-selection-foreground = #dfe0ff
+background = #1a110f
+foreground = #f1dfda
+cursor-color = #ffb59f
+selection-background = #723522
+selection-foreground = #ffdbd1
 

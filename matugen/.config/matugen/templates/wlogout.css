@@ -1,0 +1,46 @@
+/* Matugen Template for wlogout */
+
+@define-color surface {{colors.surface.default.hex}};
+@define-color on_surface {{colors.on_surface.default.hex}};
+@define-color surface_variant {{colors.surface_variant.default.hex}};
+@define-color primary {{colors.primary.default.hex}};
+@define-color primary_container {{colors.primary_container.default.hex}};
+@define-color on_primary_container {{colors.on_primary_container.default.hex}};
+
+* {
+    background-image: none;
+    box-shadow: none;
+}
+
+window {
+    background-color: alpha(@surface, 0.9);
+}
+
+button {
+    border-radius: 20px;
+    border: 3px solid transparent;
+    margin: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+    
+    /* Using the defined variables */
+    color: @on_surface;
+    background-color: @surface_variant;
+    
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: @primary_container;
+    color: @on_primary_container;
+    border: 3px solid @primary;
+}
+
+/* --- Icon Definitions --- */
+#lock { background-image: url("/usr/share/wlogout/icons/lock.png"); }
+#logout { background-image: url("/usr/share/wlogout/icons/logout.png"); }
+#suspend { background-image: url("/usr/share/wlogout/icons/suspend.png"); }
+#hibernate { background-image: url("/usr/share/wlogout/icons/hibernate.png"); }
+#shutdown { background-image: url("/usr/share/wlogout/icons/shutdown.png"); }
+#reboot { background-image: url("/usr/share/wlogout/icons/reboot.png"); }

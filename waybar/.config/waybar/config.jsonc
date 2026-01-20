@@ -1,29 +1,54 @@
 {
-  "position": "left",
   "layer": "top",
-  "width": 32,
-  "spacing": 10,
-  "margin-top": 4,
-  "margin-bottom": 4,
-  "margin-left": 4,
-  "margin-right": 0,
+  "position": "top",
+  "height": 36,
+  "spacing": 4,
   "modules-left": [
-    "niri/workspaces"
+    "hyprland/workspaces",
+    "hyprland/window"
   ],
   "modules-center": [
-    "clock",
-    "custom/clipboard"
+    "clock"
   ],
   "modules-right": [
     "custom/mako",
-    "backlight",
-    "custom/keyboard",
     "pulseaudio",
+    "backlight",
+    "hyprland/language",
     "battery",
     "network",
     "tray",
     "custom/power"
   ],
+  // --- Hyprland Workspaces ---
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "󰎤",
+      "2": "󰎧",
+      "3": "󰎪",
+      "4": "󰎭",
+      "5": "󰎱",
+      "6": "󰎳",
+      "7": "󰎶",
+      "8": "󰎹",
+      "9": "󰎼",
+      "default": "◇"
+    }
+  },
+  // --- Hyprland Window Title ---
+  "hyprland/window": {
+    "max-length": 50,
+    "separate-outputs": true
+  },
+  // --- Hyprland Language (Native) ---
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "US",
+    "format-ara": "AR"
+  },
   "custom/mako": {
     "exec": "/home/omarh/.config/waybar/scripts/mako-dnd.sh",
     "on-click": "/home/omarh/.config/waybar/scripts/mako-dnd.sh toggle",
@@ -31,54 +56,41 @@
     "return-type": "json",
     "format": "{icon}",
     "format-icons": {
-      "default": "󰂚 ", // Material Design Bell
-      "dnd": "󰂛 " // Material Design Bell Off (Slash)
+      "default": "󰂚",
+      "dnd": "󰂛"
     }
   },
   "clock": {
-    "format": "{:%I\n%M\n%p}",
-    "interval": 60,
-    "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>"
-  },
-  "niri/workspaces": {
-    "format": "{icon}",
-    "format-icons": {
-      "1": "󰎤 ",
-      "2": "󰎧 ",
-      "3": "󰎪 ",
-      "4": "󰎭 ",
-      "5": "󰎱 ",
-      "6": "󰎳 ",
-      "7": "󰎶 ",
-      "8": "󰎹 ",
-      "9": "󰎼 ",
-      "default": "◇ ",
-      "focused": "󰮯 "
-    },
-    "on-click": "activate"
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
   },
   "network": {
-    "format-wifi": "󰖩 ",
-    "format-disconnected": "󰖪 ",
-    "tooltip-format": "{essid}",
-    "on-click": "nmgui"
+    "format-wifi": "󰖩",
+    "format-disconnected": "󰖪",
+    "format-ethernet": "󰈀",
+    "tooltip-format": "{essid} ({signalStrength}%)",
+    "on-click": "nm-connection-editor"
   },
   "pulseaudio": {
-    "format": "{icon}",
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 Muted",
     "format-icons": {
       "default": [
         "󰕿",
         "󰖀",
         "󰕾"
-      ],
-      "muted": "󰝟"
+      ]
     },
-    "tooltip-format": "{volume}%",
     "on-click": "pavucontrol"
   },
   "battery": {
-    "format": "{icon}",
-    "format-charging": "󰂄",
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
     "format-icons": [
       "󰁺",
       "󰁻",
@@ -90,37 +102,23 @@
       "󰂁",
       "󰂂",
       "󰁹"
-    ],
-    "tooltip-format": "{capacity}%"
+    ]
   },
   "backlight": {
-    "format": "{icon}",
+    "format": "{icon} {percent}%",
     "format-icons": [
-      "󰃞 ",
-      "󰃟 ",
-      "󰃠 "
-    ],
-    "tooltip-format": "{percent}%"
-  },
-  "custom/clipboard": {
-    "format": "",
-    "on-click": "cliphist list | fuzzel --dmenu --width 70 --lines 10 --minimal-lines | cliphist decode | wl-copy",
-    "interval": 5,
-    "tooltip": "Clipboard"
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ]
   },
   "custom/power": {
     "format": "󰐥",
     "on-click": "wlogout",
-    "tooltip": "Power"
+    "tooltip": false
   },
   "tray": {
     "icon-size": 18,
     "spacing": 10
-  },
-  "custom/keyboard": {
-    "format": "{}",
-    "exec": "~/.config/waybar/scripts/kb-layout.sh",
-    "interval": 1,
-    "tooltip": "Layout: {}"
   }
 }
