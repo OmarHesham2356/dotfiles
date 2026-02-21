@@ -1,0 +1,129 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin-top": 5,
+  "spacing": 4,
+  /* Empty left and right to force the Island to float in the center */
+  "modules-left": [],
+  "modules-right": [],
+  /* The Dynamic Island */
+  "modules-center": [
+    "hyprland/workspaces",
+    //    "hyprland/window",
+    "clock",
+    "tray",
+    "custom/mako",
+    "hyprland/language",
+    "backlight",
+    "pulseaudio",
+    "network",
+    "battery",
+    "custom/power"
+  ],
+  // --- Workspaces ---
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "󰎤",
+      "2": "󰎧",
+      "3": "󰎪",
+      "4": "󰎭",
+      "5": "󰎱",
+      "6": "󰎳",
+      "7": "󰎶",
+      "8": "󰎹",
+      "9": "󰎼",
+      "default": "◇"
+    }
+  },
+  // --- Window Title (Restricted so the island doesn't stretch too much) ---
+  "hyprland/window": {
+    "max-length": 25,
+    "format": "{title}",
+    "separate-outputs": true
+  },
+  // --- Clock (The center of the island) ---
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+  // --- System Modules ---
+  "custom/mako": {
+    "exec": "/home/omarh/.config/waybar/scripts/mako-dnd.sh",
+    "on-click": "/home/omarh/.config/waybar/scripts/mako-dnd.sh toggle",
+    "interval": 3,
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "default": "󰂚",
+      "dnd": "󰂛"
+    }
+  },
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "US",
+    "format-ara": "AR"
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": [
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ]
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 Muted",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "on-click": "pavucontrol"
+  },
+  "network": {
+    "format-wifi": "󰖩",
+    "format-disconnected": "󰖪",
+    "format-ethernet": "󰈀",
+    "tooltip-format": "{essid} ({signalStrength}%)",
+    "on-click": "nm-connection-editor"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰂄 {capacity}%",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ]
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "wlogout"
+  }
+}

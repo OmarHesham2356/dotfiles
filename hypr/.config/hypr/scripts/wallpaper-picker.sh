@@ -1,20 +1,21 @@
 #!/bin/bash
 
-# 1. Open the File Explorer (Zenity) pointed at your wallpaper folder
-#    Change ~/Pictures/wallpaper/ to your actual folder path
+# 1. Open File Explorer
 FILE=$(zenity --file-selection --filename="$HOME/Pictures/wallpaper/" --title="Select Wallpaper" --file-filter="Images | *.jpg *.jpeg *.png *.webp")
 
-# 2. Check if the user canceled (pressed Esc or Cancel)
+# 2. Check cancellation
 if [ -z "$FILE" ]; then
   exit 0
 fi
 
-# 3. Apply the Wallpaper (using swww)
+# 3. Apply Wallpaper (swww)
 swww img "$FILE" --transition-type grow --transition-fps 60 --transition-duration 2
 
-# 4. SAVE COPY FOR HYPRLOCK (This is the magic line)
+# 4. Save Copy for Hyprlock
 cp "$FILE" ~/.config/hypr/current_wallpaper.jpg
 
-# 5. Generate Colors (using matugen)
-#    We run this in the background & send a notification when done
-matugen image "$FILE" && notify-send "Theme Updated" "Colors generated from $(basename "$FILE")"
+# --- FIX IS HERE: Changed .j to .jpg ---
+magick "$FILE" -resize x500 -strip ~/.config/rofi/cached_wallpaper.png
+
+# 5. Generate Colors
+ghostty --title "Matugen Color Picker" --class "floating" -e bash -c "matugen image -v '$FILE' ; sleep 1" && notify-send "Theme Updated" "Colors applied."

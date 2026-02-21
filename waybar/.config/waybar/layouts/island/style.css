@@ -1,0 +1,96 @@
+@import "colors.css";
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Make the main bar completely invisible */
+window#waybar {
+    background-color: transparent;
+}
+
+/* --- THE DYNAMIC ISLAND --- */
+.modules-center {
+    /* Use Matugen Surface color with slight transparency for blur */
+    background-color: alpha(@surface, 0.85);
+    border: 2px solid @primary;
+    border-radius: 40px; /* High radius for pill shape */
+    padding: 4px 18px;
+    margin-top: 5px;
+}
+
+/* --- Make all modules transparent so they blend into the island --- */
+#workspaces, #window, #clock, #tray, #language, #backlight, #pulseaudio, #battery, #network, #custom-power, #custom-mako {
+    background-color: transparent;
+    color: @on_surface;
+    margin: 0px 6px;
+    padding: 0px 4px;
+}
+
+/* --- Specific Module Styling --- */
+
+/* Clock in the center */
+#clock {
+    color: @primary;
+    font-size: 15px;
+    margin: 0px 16px;
+}
+
+/* Window Title */
+#window {
+    color: @secondary;
+}
+
+/* Workspaces */
+#workspaces button {
+    color: alpha(@on_surface, 0.5);
+    padding: 0 4px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+#workspaces button:hover {
+    color: @primary;
+    text-shadow: 0px 0px 5px alpha(@primary, 0.5);
+}
+
+#workspaces button.active {
+    color: @primary;
+    background-color: alpha(@primary, 0.15);
+}
+
+#workspaces button.urgent {
+    color: #f38ba8;
+}
+
+/* System Icons */
+#pulseaudio, #backlight, #network, #battery, #language, #custom-mako {
+    color: @secondary;
+}
+
+/* Battery Alerts */
+#battery.charging, #battery.plugged {
+    color: #a6e3a1; /* Green */
+}
+
+#battery.critical:not(.charging) {
+    color: #f38ba8; /* Red */
+    animation: blink 1s steps(2, start) infinite;
+}
+
+/* Power Button */
+#custom-power {
+    color: #f38ba8;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 2px solid alpha(@on_surface, 0.2);
+}
+
+@keyframes blink {
+    to { color: transparent; }
+}
