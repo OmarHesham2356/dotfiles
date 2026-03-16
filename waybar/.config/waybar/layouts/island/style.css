@@ -2,95 +2,237 @@
 
 * {
     font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
     min-height: 0;
     border: none;
     box-shadow: none;
 }
 
-/* Make the main bar completely invisible */
+/* Transparent main window */
 window#waybar {
     background-color: transparent;
 }
 
 /* --- THE DYNAMIC ISLAND --- */
 .modules-center {
-    /* Use Matugen Surface color with slight transparency for blur */
-    background-color: alpha(@surface, 0.85);
-    border: 2px solid @primary;
-    border-radius: 40px; /* High radius for pill shape */
-    padding: 4px 18px;
-    margin-top: 5px;
+    background-color: alpha(@surface, 0.6);
+    border: 1px solid alpha(@primary, 0.4);
+    border-radius: 24px;
+    padding: 6px 20px;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px alpha(@surface, 0.3);
 }
 
-/* --- Make all modules transparent so they blend into the island --- */
-#workspaces, #window, #clock, #tray, #language, #backlight, #pulseaudio, #battery, #network, #custom-power, #custom-mako {
+/* --- Base Module Styling --- */
+#workspaces, #mpris, #clock, #custom-arrow-right, 
+#cpu, #memory, #temperature, #tray, #custom-mako, 
+#language, #backlight, #pulseaudio, #network, 
+#battery, #custom-power, #cava {
     background-color: transparent;
     color: @on_surface;
-    margin: 0px 6px;
-    padding: 0px 4px;
-}
-
-/* --- Specific Module Styling --- */
-
-/* Clock in the center */
-#clock {
-    color: @primary;
-    font-size: 15px;
-    margin: 0px 16px;
-}
-
-/* Window Title */
-#window {
-    color: @secondary;
-}
-
-/* Workspaces */
-#workspaces button {
-    color: alpha(@on_surface, 0.5);
-    padding: 0 4px;
-    border-radius: 20px;
+    margin: 0px 4px;
+    padding: 0px 8px;
+    border-radius: 12px;
     transition: all 0.3s ease;
+}
+
+/* --- Workspaces (App Icons or Numbers) --- */
+#workspaces {
+    margin-right: 12px;
+    padding: 0px;
+}
+
+#workspaces button {
+    color: alpha(@on_surface, 0.6);
+    padding: 0 10px;
+    margin: 0 4px;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    min-width: 32px;
+}
+
+/* When workspace has windows, hide the number (first label) */
+#workspaces button:not(.empty) label:first-child {
+}
+
+/* When workspace is empty, show number normally */
+#workspaces button.empty {
+    color: alpha(@on_surface, 0.4);
+}
+
+/* When workspace has app icon */
+#workspaces button:not(.empty) {
+    color: @secondary;
+    font-size: 16px;
 }
 
 #workspaces button:hover {
     color: @primary;
-    text-shadow: 0px 0px 5px alpha(@primary, 0.5);
+    background-color: alpha(@primary, 0.1);
 }
 
 #workspaces button.active {
     color: @primary;
-    background-color: alpha(@primary, 0.15);
+    background-color: alpha(@primary, 0.2);
+    min-width: 40px;
 }
 
 #workspaces button.urgent {
     color: #f38ba8;
+    animation: pulse 1s ease-in-out infinite;
 }
 
-/* System Icons */
-#pulseaudio, #backlight, #network, #battery, #language, #custom-mako {
+/* --- MPRIS --- */
+#mpris {
+    color: @secondary;
+    font-size: 12px;
+    margin: 0 8px;
+}
+
+#mpris.playing {
+    color: @primary;
+}
+
+/* --- Clock (Centerpiece) --- */
+#clock {
+    color: @primary;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 16px;
+    padding: 4px 16px;
+    background-color: alpha(@primary, 0.1);
+    border-radius: 16px;
+}
+
+/* --- Group/Drawer --- */
+#group-info {
+    margin: 0 8px;
+}
+
+#custom-arrow-right {
+    color: @primary;
+    font-size: 14px;
+}
+
+#cpu, #memory, #temperature {
+    color: @secondary;
+    font-size: 11px;
+    padding: 0 6px;
+}
+
+#temperature.critical {
+    color: #f38ba8;
+}
+
+/* --- System Modules --- */
+#tray, #custom-mako, #language, 
+#backlight, #pulseaudio, #network, #battery {
+    color: @secondary;
+    font-size: 12px;
+}
+
+#custom-mako {
+    padding: 0 10px;
+    color: @primary;
+}
+
+#custom-mako.dnd {
+    color: alpha(@on_surface, 0.4);
+}
+
+#language {
+    min-width: 28px;
+}
+
+#network {
+    min-width: 40px;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+}
+
+/* --- Battery States --- */
+#battery {
     color: @secondary;
 }
 
-/* Battery Alerts */
 #battery.charging, #battery.plugged {
-    color: #a6e3a1; /* Green */
+    color: #a6e3a1;
+}
+
+#battery.warning:not(.charging) {
+    color: #f9dEDC;
 }
 
 #battery.critical:not(.charging) {
-    color: #f38ba8; /* Red */
-    animation: blink 1s steps(2, start) infinite;
+    color: #f38ba8;
+    animation: blink 1s steps(2) infinite;
 }
 
-/* Power Button */
+/* --- Power Button --- */
 #custom-power {
     color: #f38ba8;
-    margin-left: 10px;
-    padding-left: 10px;
-    border-left: 2px solid alpha(@on_surface, 0.2);
+    margin-left: 12px;
+    padding-left: 14px;
+    border-left: 1px solid alpha(@on_surface, 0.2);
+    font-size: 14px;
 }
 
-@keyframes blink {
-    to { color: transparent; }
+#custom-power:hover {
+    color: alpha(#f38ba8, 0.8);
+    text-shadow: 0 0 8px alpha(#f38ba8, 0.4);
 }
+
+/* --- Tray --- */
+#tray {
+    margin: 0 8px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+/* --- Animations --- */
+@keyframes blink {
+    0% { color: #f38ba8; }
+    50% { color: transparent; }
+    100% { color: #f38ba8; }
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* --- Tooltip Styling --- */
+tooltip {
+    background-color: alpha(@surface, 0.95);
+    border: 1px solid alpha(@on_surface, 0.2);
+    border-radius: 12px;
+    padding: 8px 12px;
+    color: @on_surface;
+    font-size: 12px;
+    box-shadow: 0 4px 20px alpha(@surface, 0.4);
+}
+
+tooltip label {
+    color: @on_surface;
+}
+
+
+
+#cava {
+    color: @primary;
+    font-family: "Noto Sans Mono", "monospace";
+    font-size: 18px;
+    padding: 0 10px;
+}
+
+

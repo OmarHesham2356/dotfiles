@@ -3,12 +3,12 @@
 layout {
     focus-ring {
         // Use "hex" to get the #RRGGBB format
-        active-color "#f4b2e3"
-        inactive-color "#4e444a"
+        active-color "#cfbdfe"
+        inactive-color "#49454e"
     }
 
     border {
-        active-color "#f4b2e3"
-        inactive-color "#4e444a"
+        active-color "#cfbdfe"
+        inactive-color "#49454e"
     }
 }

@@ -1,0 +1,126 @@
+@import "colors.css";
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0; /* Keeps everything flush for the minimal line */
+}
+
+/* --- MINIMAL BAR BASE --- */
+/* Instead of the island container, the whole bar gets the Matugen background */
+window#waybar {
+    background-color: alpha(@surface, 0.6);
+    border-bottom: 1px solid alpha(@primary, 0.4);
+}
+
+/* --- Base Module Styling --- */
+#workspaces, #mpris, #clock, #custom-arrow-right, 
+#cpu, #memory, #temperature, #tray, #custom-mako, 
+#language, #backlight, #pulseaudio, #network, 
+#battery, #custom-power, #cava, #tray {
+    background-color: transparent;
+    color: @on_surface;
+    margin: 0px 4px;
+    padding: 0px 8px;
+    transition: all 0.3s ease;
+}
+
+/* --- Workspaces --- */
+#workspaces {
+    margin-right: 12px;
+}
+
+#workspaces button {
+    color: alpha(@on_surface, 0.4);
+    padding: 0 6px;
+}
+
+#workspaces button:hover {
+    color: @primary;
+    background-color: transparent;
+    text-shadow: 0 0 5px alpha(@primary, 0.4);
+}
+
+/* For a minimal bar, an underline looks much sleeker than a filled pill */
+#workspaces button.active {
+    color: @primary;
+    border-bottom: 2px solid @primary;
+    background-color: transparent;
+}
+
+/* --- Cava & Media --- */
+#cava {
+    color: @secondary; 
+}
+
+#mpris {
+    color: @secondary;
+}
+
+#mpris.playing {
+    color: @primary;
+}
+
+/* --- Specific Colors (Matching your theme perfectly) --- */
+#clock { color: @primary; font-weight: bold; }
+#custom-arrow-right { color: @secondary; font-size: 16px; }
+
+/* Hardware Stats */
+#cpu { color: @secondary; }
+#memory { color: @secondary; }
+#temperature { color: @secondary; }
+
+/* System Controls */
+#backlight { color: @primary; }
+#pulseaudio { color: @primary; }
+
+#custom-mako {
+    color: @primary;
+}
+
+#network { 
+  color: @primary;
+  min-width: 40px; 
+}
+#network.disconnected { color: #f38ba8; }
+
+#language { min-width: 28px; }
+
+/* --- Battery States --- */
+#battery { color: @secondary; }
+#battery.charging, #battery.plugged { color: #a6e3a1; }
+#battery.warning:not(.charging) { color: #f9dEDC; }
+#battery.critical:not(.charging) {
+    color: #f38ba8;
+    animation: blink 1s steps(2) infinite;
+}
+
+/* --- Power Button --- */
+#custom-power {
+    color: #f38ba8;
+    margin-left: 12px;
+    padding-left: 14px;
+    border-left: 1px solid alpha(@on_surface, 0.2);
+    font-size: 14px;
+}
+
+#custom-power:hover {
+    color: alpha(#f38ba8, 0.8);
+    text-shadow: 0 0 8px alpha(#f38ba8, 0.4);
+}
+
+/* --- Tray --- */
+#tray { margin: 0 8px; }
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }
+
+/* --- Animations --- */
+@keyframes blink {
+    0% { color: #f38ba8; }
+    50% { color: transparent; }
+    100% { color: #f38ba8; }
+}
