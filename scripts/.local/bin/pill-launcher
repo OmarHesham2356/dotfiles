@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Pill launcher - mode selector with blur theme
+
+options=(
+    " Apps"
+    " Run"
+    " Windows"
+    " Files"
+    " Emoji"
+    " Clipboard"
+)
+
+rofi_cmds=(
+    "rofi -show drun"
+    "rofi -show run"
+    "rofi -show window"
+    "rofi -show filebrowser"
+    "rofi -show emoji"
+    "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"
+)
+
+selected=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "" -width 300 -lines 6 -no-fixed-num-lines 2>/dev/null)
+
+if [[ -n "$selected" ]]; then
+    for i in "${!options[@]}"; do
+        if [[ "$selected" == "${options[$i]}" ]]; then
+            eval "${rofi_cmds[$i]}"
+            break
+        fi
+    done
+fi

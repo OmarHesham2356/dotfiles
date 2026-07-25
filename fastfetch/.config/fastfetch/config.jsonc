@@ -1,0 +1,115 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+ "logo": {
+    "type": "auto",
+    "source": "arch",
+    "padding": { "top": 1, "left": 1, "right": 1 }
+  },
+  "display": {
+    "separator": " ",
+    "percent": { "type": 3, "color": { "green": 30, "yellow": 60 } },
+    "bar": { "width": 15, "char": { "elapsed": "█", "total": "░" } }
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "{#green}  󰌢 System{#}",
+      "outputColor": "green"
+    },
+    {
+      "type": "os",
+      "key": "{#green}├─{icon}{#}",
+      "keyColor": "green",
+      "format": "{name} {version}"
+    },
+    {
+      "type": "host",
+      "key": "{#green}├─󰌢{#}",
+      "keyColor": "green"
+    },
+    {
+      "type": "kernel",
+      "key": "{#green}├─{icon}{#}",
+      "keyColor": "green"
+    },
+    {
+      "type": "uptime",
+      "key": "{#green}├─󰅐{#}",
+      "keyColor": "green"
+    },
+    {
+      "type": "packages",
+      "key": "{#green}╰─󰏖{#}",
+      "keyColor": "green"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "{#blue}  󰍛 Hardware{#}",
+      "outputColor": "blue"
+    },
+    {
+      "type": "cpu",
+      "key": "{#blue}├─󰻠{#}",
+      "keyColor": "blue",
+      "format": "{name} ({cores-physical}C/{cores-logical}T)"
+    },
+    {
+      "type": "gpu",
+      "key": "{#blue}├─󰍛{#}",
+      "keyColor": "blue"
+    },
+    {
+      "type": "memory",
+      "key": "{#blue}├─󰑭{#}",
+      "keyColor": "blue",
+      "format": "{used} / {total} {percentage-bar}"
+    },
+    {
+      "type": "disk",
+      "key": "{#blue}├─{icon}{#}",
+      "keyColor": "blue",
+      "format": "{size-used} / {size-total} [{size-percentage}]",
+      "folders": "/"
+    },
+    {
+      "type": "battery",
+      "key": "{#blue}╰─{icon}{#}",
+      "keyColor": "blue",
+      "format": "{capacity} {capacity-bar}"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "{#yellow}   Desktop{#}",
+      "outputColor": "yellow"
+    },
+    {
+      "type": "wm",
+      "key": "{#yellow}├─{icon}{#}",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "terminal",
+      "key": "{#yellow}├─{icon}{#}",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "shell",
+      "key": "{#yellow}╰─{icon}{#}",
+      "keyColor": "yellow"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "{#magenta}   Tasks{#}",
+      "outputColor": "magenta"
+    },
+    {
+      "type": "command",
+      "key": "{#magenta}╰─{#}",
+      "keyColor": "magenta",
+      "text": "count=$(task status:pending count 2>/dev/null); if [ \"$count\" -gt 0 ]; then echo \"$count pending\"; task rc.verbose:blank limit:3 status:pending 2>/dev/null | tail -n +2 | sed 's/^/    /'; else echo \"none pending\"; fi"
+    }
+  ]
+}

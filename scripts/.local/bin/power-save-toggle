@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Toggle power profile between power-saver and balanced
+current=$(powerprofilesctl get)
+if [ "$current" = "power-saver" ]; then
+  powerprofilesctl set balanced
+else
+  powerprofilesctl set power-saver
+fi

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Web search using rofi + firefox
+query=$(rofi -dmenu -p "  Search " -theme-str 'window {width: 500px;}')
+if [ -n "$query" ]; then
+  firefox "https://duckduckgo.com/?q=$query" &
+fi

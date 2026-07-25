@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+STATE_FILE="/tmp/.waybar-mem-mode"
+
+if [ -f "$STATE_FILE" ] && [ "$(cat "$STATE_FILE")" = "usage" ]; then
+  echo "percent" > "$STATE_FILE"
+else
+  echo "usage" > "$STATE_FILE"
+fi

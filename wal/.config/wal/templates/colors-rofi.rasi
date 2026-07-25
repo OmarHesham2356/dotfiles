@@ -1,0 +1,41 @@
+* {{
+    background-color: {background};
+    text-color: {foreground};
+}}
+
+window {{
+    background-color: {background};
+    border-color: {color5};
+}}
+
+inputbar {{
+    background-color: {background};
+}}
+
+element selected {{
+    background-color: {color5};
+    text-color: {background};
+}}
+
+element normal.urgent,
+element alternate.urgent,
+element selected.urgent {{
+    background-color: {color1};
+    text-color: {background};
+}}
+
+element normal.active,
+element alternate.active,
+element selected.active {{
+    background-color: {color5};
+    text-color: {background};
+}}
+
+scrollbar {{
+    handle-color: {color5};
+}}
+
+button selected {{
+    background-color: {color5};
+    text-color: {background};
+}}

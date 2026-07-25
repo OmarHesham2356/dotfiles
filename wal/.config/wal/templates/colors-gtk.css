@@ -1,0 +1,70 @@
+:root {
+  --bg-color: {background};
+  --fg-color: {foreground};
+  --selected-bg: {color4};
+  --selected-fg: {background};
+  --error-color: {color1};
+  --success-color: {color2};
+  --warning-color: {color3};
+  --info-color: {color4};
+  --link-color: {color5};
+  --insensitive-bg: {color8};
+  --insensitive-fg: {color7};
+}
+
+/* GTK headerbar / CSD */
+headerbar,
+.titlebar {
+  background-color: {background};
+  color: {foreground};
+}
+
+headerbar button,
+.titlebar button {
+  color: {foreground};
+}
+
+/* Selection color */
+*:selected,
+:selected {
+  background-color: {color4};
+  color: {background};
+}
+
+/* Links */
+a {
+  color: {color5};
+}
+
+/* GTK buttons */
+button {
+  color: {foreground};
+}
+
+/* Sidebar / Navigation */
+sidebar {
+  background-color: {color0};
+  color: {foreground};
+}
+
+/* Scrollbar */
+scrollbar,
+scrollbar slider {
+  background-color: {color8};
+}
+
+/* Switch / Toggle */
+switch:checked {
+  background-color: {color4};
+}
+
+/* Notebook / Tabs */
+notebook tab {
+  background-color: {color8};
+  color: {foreground};
+}
+
+notebook tab:checked {
+  background-color: {background};
+  color: {color4};
+}

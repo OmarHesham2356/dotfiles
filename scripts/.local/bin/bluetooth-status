@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Check if bluetooth is on
+if rfkill list bluetooth 2>/dev/null | grep -q "Soft blocked: no"; then
+  echo true
+else
+  echo false
+fi

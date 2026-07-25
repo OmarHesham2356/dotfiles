@@ -1,0 +1,30 @@
+[opener]
+edit = [
+  { run = "vim %s", desc = "vim", for = "unix", block = true },
+]
+pdf = [
+  { run = "zen-browser '$@'", block = false, for = "unix" },
+]
+extract = [
+  { run = "ouch d -y '$@'", desc = "Extract here with ouch", for = "unix" },
+]
+
+[plugin]
+prepend_fetchers = [
+  { id = "git", url = "*", run = "git", group = "git" },
+  { id = "git", url = "*/", run = "git", group = "git" },
+]
+
+prepend_preloaders = [
+  { mime = "{audio,video,image}/*", run = "mediainfo" },
+  { mime = "application/subrip", run = "mediainfo" },
+  { url = "*.{ai,eps,ait}", run = "mediainfo" },
+  { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", run = "ouch" },
+]
+
+prepend_previewers = [
+  { mime = "{audio,video,image}/*", run = "mediainfo" },
+  { mime = "application/subrip", run = "mediainfo" },
+  { url = "*.{ai,eps,ait}", run = "mediainfo" },
+  { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", run = "ouch" },
+]

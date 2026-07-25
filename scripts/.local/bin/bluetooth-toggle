@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Toggle bluetooth on/off
+if rfkill list bluetooth 2>/dev/null | grep -q "Soft blocked: no"; then
+  bluetoothctl power off
+  rfkill block bluetooth
+  notify-send "Bluetooth" "Off" 2>/dev/null
+else
+  rfkill unblock bluetooth
+  bluetoothctl power on
+  notify-send "Bluetooth" "On" 2>/dev/null
+fi

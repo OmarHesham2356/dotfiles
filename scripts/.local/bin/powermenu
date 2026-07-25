@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Power menu using rofi
+entries="⏻ Shutdown\n⏻ Reboot\n󰤄 Suspend\n Lock\n Logout"
+
+selected=$(echo -e "$entries" | rofi -dmenu -p "Power" -theme-str 'window {width: 200px;} listview {lines: 5;}')
+
+case "$selected" in
+  *Shutdown) systemctl poweroff ;;
+  *Reboot)   systemctl reboot ;;
+  *Suspend)  systemctl suspend ;;
+  *Lock)     hyprlock ;;
+  *Logout)   hyprctl dispatch exit ;;
+esac

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Toggle screen recording using wf-recorder
+PID_FILE="/tmp/recording.pid"
+
+if [ -f "$PID_FILE" ]; then
+  pid=$(cat "$PID_FILE")
+  kill -INT "$pid" 2>/dev/null
+  rm -f "$PID_FILE"
+  notify-send "Recording" "Stopped — saved to ~/Videos/"
+else
+  filename="recording_$(date +%Y%m%d_%H%M%S).mp4"
+  mkdir -p ~/Videos
+  wf-recorder -f ~/Videos/"$filename" &
+  echo $! > "$PID_FILE"
+  notify-send "Recording" "Started — $filename"
+fi

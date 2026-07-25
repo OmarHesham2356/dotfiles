@@ -1,1 +1,104 @@
-/home/omarh/.config/waybar/layouts/minimal/style.css
+@import "/home/omararch/.cache/wal/colors-waybar.css";
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: JetBrainsMono Nerd Font, JetBrainsMono Nerd Font Mono, sans-serif;
+  font-size: 12px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: @foreground;
+}
+
+#workspaces {
+  margin: 0 4px;
+}
+
+#workspaces button {
+  padding: 0 10px;
+  margin: 0 1px;
+  background: transparent;
+  color: @foreground;
+  border: none;
+  font-size: 11px;
+  min-width: 20px;
+}
+
+#workspaces button:hover {
+  color: @color4;
+}
+
+#workspaces button.active {
+  color: @color4;
+}
+
+#workspaces button.urgent {
+  color: @color1;
+}
+
+#clock {
+  padding: 0 8px;
+  color: @foreground;
+}
+
+#mpris,
+#cava,
+#custom-cpu,
+#custom-memory,
+#pulseaudio,
+#backlight,
+#language,
+#network,
+#battery,
+#power-profiles-daemon {
+  padding: 0 8px;
+  color: @foreground;
+  border-right: 1px solid alpha(@foreground, 0.15);
+}
+
+#mpris.playing {
+  color: @color2;
+}
+
+#mpris.paused {
+  color: @color8;
+}
+
+#cava.silent {
+  color: @color8;
+}
+
+#pulseaudio.muted {
+  color: @color1;
+}
+
+#network.disconnected {
+  color: @color8;
+}
+
+#battery.warning {
+  color: @color3;
+}
+
+#battery.critical {
+  color: @color1;
+}
+
+#battery.charging {
+  color: @color2;
+}
+
+#tray {
+  padding: 0 4px;
+  color: @foreground;
+}
+
+#custom-power {
+  padding: 0 10px;
+  color: @color1;
+}

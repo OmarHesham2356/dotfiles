@@ -1,0 +1,151 @@
+configuration {
+  modi:                "drun,run,window,filebrowser,emoji";
+  show-icons:          true;
+  icon-theme:          "Papirus-Dark";
+  display-drun:        " Apps";
+  display-run:         " Run";
+  display-window:      " Windows";
+  display-filebrowser: " Files";
+  display-emoji:       " Emoji";
+  drun-display-format: "{icon} {name}";
+  window-format:       "{w} {t}";
+  disable-history:     false;
+  click-to-exit:       true;
+  terminal:            "kitty";
+  font:                "JetBrainsMono Nerd Font 11";
+  matching:            "fuzzy";
+  hover-select:        true;
+  me-select-entry:     "";
+  me-accept-entry:     "MousePrimary";
+}
+
+window {
+  location:         center;
+  anchor:           center;
+  width:            540px;
+  background-color: #0d0d1f55;
+  border:           1px;
+  border-color:     #B7A0B2aa;
+  border-radius:    20px;
+  padding:          0px;
+}
+
+mainbox {
+  background-color: transparent;
+  spacing:          0px;
+  children:         [ inputbar, listview ];
+}
+
+inputbar {
+  background-color: transparent;
+  padding:          16px 16px 12px 16px;
+  children:         [ prompt, entry ];
+}
+
+prompt {
+  background-color: #B7A0B2;
+  text-color:       #0d0d1f;
+  padding:          9px 16px;
+  border-radius:    999px;
+  margin:           0px 10px 0px 0px;
+}
+
+entry {
+  background-color: #5c5c7188;
+  text-color:       #c2c2c7;
+  placeholder:      "  Search apps, run command...";
+  placeholder-color: #5c5c71cc;
+  padding:          10px 18px;
+  border-radius:    999px;
+  cursor:           text;
+  expand:           true;
+}
+
+listview {
+  background-color: transparent;
+  columns:          1;
+  lines:            7;
+  cycle:            true;
+  dynamic:          true;
+  fixed-height:     true;
+  layout:           vertical;
+  spacing:          0px;
+  padding:          4px 8px 8px 8px;
+  scrollbar:        false;
+}
+
+element {
+  orientation:      horizontal;
+  children:         [ element-icon, element-text ];
+  padding:          8px 12px;
+  border-radius:    12px;
+  background-color: transparent;
+  cursor:           pointer;
+}
+
+element-icon {
+  background-color: transparent;
+  size:             1.6em;
+  margin:           0px 10px 0px 4px;
+}
+
+element-text {
+  background-color: transparent;
+  expand:           true;
+  vertical-align:   0.5;
+  highlight:        bold underline;
+}
+
+element normal.normal,
+element alternate.normal {
+  background-color: transparent;
+  text-color:       #5c5c71;
+}
+
+element selected.normal {
+  background-color: #B7A0B244;
+  text-color:       #c2c2c7;
+  border:           1px;
+  border-color:     #B7A0B2aa;
+  border-radius:    12px;
+}
+
+element normal.urgent,
+element alternate.urgent {
+  background-color: transparent;
+  text-color:       #463D62;
+}
+
+element selected.urgent {
+  background-color: #463D6244;
+  text-color:       #c2c2c7;
+  border:           1px;
+  border-color:     #463D62aa;
+  border-radius:    12px;
+}
+
+element normal.active,
+element alternate.active {
+  background-color: transparent;
+  text-color:       #394C67;
+}
+
+element selected.active {
+  background-color: #394C6744;
+  text-color:       #c2c2c7;
+  border:           1px;
+  border-color:     #394C67aa;
+  border-radius:    12px;
+}
+
+message {
+  background-color: transparent;
+  padding:          0px 16px 12px 16px;
+}
+
+textbox {
+  background-color: #5c5c7188;
+  text-color:       #c2c2c7;
+  padding:          8px 14px;
+  border-radius:    12px;
+}

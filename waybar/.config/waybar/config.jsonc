@@ -1,1 +1,151 @@
-/home/omarh/.config/waybar/layouts/minimal/config.jsonc
+{
+  "layer": "top",
+  "position": "top",
+  "height": 28,
+  "spacing": 4,
+  "modules-left": ["hyprland/workspaces", "mpris", "cava"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/cpu", "custom/memory", "pulseaudio", "backlight", "hyprland/language", "network", "battery", "power-profiles-daemon", "tray", "custom/power"],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "move-to-monitor": true,
+    "on-click": "activate",
+    "sort-by-number": true,
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "urgent": "!"
+    },
+    "persistent-workspaces": {
+      "DP-1": [1, 2, 3, 4, 5],
+      "eDP-1": [6, 7, 8, 9, 10]
+    }
+  },
+
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+    "status-icons": { "paused": "⏸" },
+    "player-icons": { "default": "▶" },
+    "artist-len": 15,
+    "title-len": 25,
+    "album-len": 12,
+    "dynamic-len": 35,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "on-click-middle": "playerctl previous"
+  },
+
+  "cava": {
+    "cava_config": "/home/omararch/.config/cava/waybar.conf",
+    "input_delay": 2,
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "actions": {
+      "on-click-middle": "mode"
+    }
+  },
+
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "format-alt": "{:%a %b %d}",
+    "tooltip-format": "{:%A, %B %d, %Y}",
+    "interval": 30,
+    "calendar": {
+      "format": {
+        "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
+      }
+    }
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "{icon} M",
+    "format-icons": {
+      "default": ["\uf026", "\uf027", "\uf028"]
+    },
+    "on-click": "pavucontrol",
+    "scroll-step": 5
+  },
+
+  "network": {
+    "format-wifi": "\uf1eb {signalStrength}%",
+    "format-ethernet": "\uf1eb",
+    "format-disconnected": "\uf127",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "interval": 30
+  },
+
+  "battery": {
+    "states": {
+      "warning": 20,
+      "critical": 10
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "\uf0e7 {capacity}%",
+    "format-plugged": "\uf0e7 {capacity}%",
+    "format-icons": ["\uf244", "\uf243", "\uf242", "\uf241", "\uf240"],
+    "tooltip-format": "{timeTo} {power}"
+  },
+
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "US",
+    "format-ar": "AR",
+    "on-click": "hyprctl switchxkblayout 0 next"
+  },
+
+  "backlight": {
+    "format": "\u2600 {percent}%",
+    "scroll-step": 5,
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-"
+  },
+
+  "custom/cpu": {
+    "format": "\uf2db {}%",
+    "tooltip": false,
+    "interval": 5,
+    "exec": "grep '^cpu ' /proc/stat | awk '{print int(($2+$4)*100/($2+$4+$5))}'",
+    "exec-if": "true"
+  },
+
+  "custom/memory": {
+    "format": "\uf0a0 {}",
+    "tooltip": false,
+    "interval": 10,
+    "exec": "/home/omararch/.local/bin/memory-toggle",
+    "on-click": "/home/omararch/.local/bin/memory-mode",
+    "exec-if": "true"
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "{profile}",
+    "format-icons": {
+      "default": "\uf0e7",
+      "performance": "\uf0e7",
+      "balanced": "\uf017",
+      "power-saver": "\uf244"
+    }
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 4
+  },
+
+  "custom/power": {
+    "format": "\u23fb",
+    "on-click": "/home/omararch/.local/bin/powermenu",
+    "tooltip": false
+  }
+}

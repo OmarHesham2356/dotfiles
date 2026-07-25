@@ -1,0 +1,9 @@
+[[mgr.prepend_keymap]]
+on = "M"
+run = "plugin mount"
+desc = "Open mount manager"
+
+[[mgr.prepend_keymap]]
+on = ["c", "w"]
+run = "shell -- \"$HOME/.local/bin/wallpaper\" \"$0\""
+desc = "Set as wallpaper"

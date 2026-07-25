@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Toggle caffeine mode (block/unblock suspend)
+PID_FILE="/tmp/caffeine.pid"
+
+if [ -f "$PID_FILE" ]; then
+  pid=$(cat "$PID_FILE")
+  kill "$pid" 2>/dev/null
+  rm -f "$PID_FILE"
+  notify-send "Caffeine" "Disabled — suspend allowed"
+else
+  nohup systemd-inhibit --what=sleep --mode=block --who=Caffeine --why="Manual caffeine" sleep infinity > /dev/null 2>&1 &
+  disown
+  echo $! > "$PID_FILE"
+  notify-send "Caffeine" "Enabled — suspend blocked"
+fi

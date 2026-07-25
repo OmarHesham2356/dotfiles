@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+STATE_FILE="/tmp/.waybar-mem-mode"
+
+if [ -f "$STATE_FILE" ] && [ "$(cat "$STATE_FILE")" = "usage" ]; then
+  free -h | awk '/^Mem/ {printf "%.1fG/%.1fG", $3, $2}'
+else
+  free | awk '/^Mem/ {printf "%.0f%%", $3/$2 * 100}'
+fi

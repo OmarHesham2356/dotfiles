@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Toggle scratchpad terminal
+if hyprctl clients | grep -q "class: scratchpad"; then
+  hyprctl dispatch togglespecialworkspace scratchpad
+else
+  kitty --class scratchpad &
+  sleep 0.3
+  hyprctl dispatch togglespecialworkspace scratchpad
+fi

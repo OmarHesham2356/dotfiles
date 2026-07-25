@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Toggle WiFi on/off
+if nmcli radio wifi | grep -q "enabled"; then
+  nmcli radio wifi off
+  notify-send "WiFi" "Off"
+else
+  nmcli radio wifi on
+  notify-send "WiFi" "On"
+fi

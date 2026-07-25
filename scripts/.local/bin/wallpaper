@@ -1,0 +1,396 @@
+#!/usr/bin/env bash
+# Wallpaper setter with pywal integration
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+
+usage() {
+  cat <<EOF
+Usage: wallpaper [options]
+
+Options:
+  -i, --interactive   Pick a wallpaper using imv/image preview
+  -r, --random        Pick a random wallpaper
+  -p, --previous      Restore previous wallpaper
+  -h, --help          Show this help
+
+Without options, picks a random wallpaper.
+EOF
+  exit 0
+}
+
+random_wallpaper() {
+  find "$WALLPAPER_DIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.bmp' \) | shuf -n 1
+}
+
+set_wallpaper() {
+  local img="$1"
+  if [[ ! -f "$img" ]]; then
+    notify-send "wallpaper" "File not found: $img"
+    exit 1
+  fi
+
+  echo "$img" > "$HOME/.cache/wallpaper.prev"
+
+  # Generate pywal colors (all templates)
+  wal -i "$img" -q 2>/dev/null || true
+
+  # Generate GTK CSS from pywal colors
+  wal -g 2>/dev/null || true
+
+  # Generate custom GTK CSS from pywal JSON
+  local WAL_JSON="$HOME/.cache/wal/colors.json"
+  local GTK_CSS="$HOME/.cache/wal/colors-gtk.css"
+  local HYPRLOCK_COLORS="$HOME/.cache/wal/colors-hyprlock.conf"
+  if [[ -f "$WAL_JSON" ]]; then
+    python3 -c "
+import json
+with open('$WAL_JSON') as f:
+    c = json.load(f)
+s = c.get('special', {})
+a = c.get('colors', {})
+
+bg = s.get('background', '#1e1e2e')
+fg = s.get('foreground', '#cdd6f4')
+c0 = a.get('color0', '#1e1e2e')
+c1 = a.get('color1', '#f38ba8')
+c2 = a.get('color2', '#a6e3a1')
+c3 = a.get('color3', '#f9e2af')
+c4 = a.get('color4', '#89b4fa')
+c5 = a.get('color5', '#f5c2e7')
+c6 = a.get('color6', '#94e2d5')
+c7 = a.get('color7', '#bac2de')
+c8 = a.get('color8', '#585b70')
+
+def alpha(hex_color, a):
+    h = hex_color.lstrip('#')
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f'rgba({r},{g},{b},{a})'
+
+css = f''':root {{
+  --bg-color: {bg};
+  --fg-color: {fg};
+  --selected-bg: {c4};
+  --selected-fg: {bg};
+  --error-color: {c1};
+  --success-color: {c2};
+  --warning-color: {c3};
+  --info-color: {c4};
+  --link-color: {c5};
+  --insensitive-bg: {c8};
+  --insensitive-fg: {c7};
+  --borders: {alpha(c8, 0.4)};
+  --unfocused-borders: {alpha(c8, 0.2)};
+}}
+
+/* GTK headerbar / CSD */
+headerbar,
+.titlebar {{
+  background-color: {bg};
+  color: {fg};
+  border-bottom: 1px solid {alpha(c8, 0.3)};
+}}
+
+headerbar button,
+.titlebar button {{
+  color: {fg};
+}}
+
+headerbar button:hover,
+.titlebar button:hover {{
+  background-color: {alpha(c4, 0.2)};
+}}
+
+/* Selection color */
+*:selected,
+:selected {{
+  background-color: {alpha(c4, 0.3)};
+  color: {fg};
+}}
+
+/* Links */
+a {{
+  color: {c5};
+}}
+
+/* GTK buttons */
+button {{
+  color: {fg};
+}}
+
+button:hover {{
+  background-color: {alpha(c4, 0.15)};
+}}
+
+/* Sidebar / Navigation */
+sidebar {{
+  background-color: {alpha(c0, 0.6)};
+  color: {fg};
+}}
+
+/* Scrollbar */
+scrollbar,
+scrollbar slider {{
+  background-color: {alpha(c8, 0.3)};
+}}
+
+scrollbar slider:hover {{
+  background-color: {alpha(c4, 0.4)};
+}}
+
+/* Switch / Toggle */
+switch:checked {{
+  background-color: {c4};
+}}
+
+/* Notebook / Tabs */
+notebook tab {{
+  background-color: {alpha(c8, 0.2)};
+  color: {fg};
+}}
+
+notebook tab:checked {{
+  background-color: {bg};
+  color: {c4};
+}}
+'''
+with open('$GTK_CSS', 'w') as f:
+    f.write(css)
+" 2>&1 || true
+  fi
+  if [[ -f "$WAL_JSON" ]]; then
+    python3 -c "
+import json
+with open('$WAL_JSON') as f:
+    c = json.load(f)
+s = c.get('special', {})
+a = c.get('colors', {})
+
+def h2r(h):
+    h = h.lstrip('#')
+    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+bg = s.get('background', '#1e1e2e')
+fg = s.get('foreground', '#cdd6f4')
+wp = a.get('wallpaper', '$HOME/Pictures/wallpapers/default.jpg')
+
+lines = []
+lines.append(f'\$wallpaper = {wp}')
+lines.append(f'\$background = {bg}')
+lines.append(f'\$foreground = {fg}')
+
+for i in range(16):
+    hexcolor = a.get(f'color{i}', '#000000')
+    lines.append(f'\$color{i} = {hexcolor}')
+
+def rgba_raw(hex_color, alpha):
+    r, g, b = h2r(hex_color)
+    return f'{r},{g},{b},{alpha}'
+
+c4 = a.get('color4', '#89b4fa')
+c5 = a.get('color5', '#f5c2e7')
+c2 = a.get('color2', '#a6e3a1')
+c8 = a.get('color8', '#585b70')
+c0 = a.get('color0', '#1e1e2e')
+
+lines.append('')
+lines.append('# Pre-computed alpha values (used as rgba(\$var) in hyprland config)')
+lines.append(f'\$color5cc = {rgba_raw(c5, 0.8)}')
+lines.append(f'\$color4cc = {rgba_raw(c4, 0.8)}')
+lines.append(f'\$color2cc = {rgba_raw(c2, 0.8)}')
+lines.append(f'\$color800 = {rgba_raw(c8, 0.0)}')
+lines.append(f'\$color077 = {rgba_raw(c0, 0.467)}')
+
+with open('$HOME/.cache/wal/colors-hyprland.conf', 'w') as f:
+    f.write('\n'.join(lines) + '\n')
+" 2>&1 || true
+  fi
+  if [[ -f "$WAL_JSON" ]]; then
+    python3 -c "
+import json
+with open('$WAL_JSON') as f:
+    c = json.load(f)
+s = c.get('special', {})
+a = c.get('colors', {})
+
+def h2r(h):
+    h = h.lstrip('#')
+    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+lines = ['# Pywal colors for hyprlock']
+for name, hexcolor in [('bg', s.get('background', '#000000')), ('fg', s.get('foreground', '#ffffff'))]:
+    r, g, b = h2r(hexcolor)
+    lines.append(f'\${name} = rgb({r}, {g}, {b})')
+    lines.append(f'\${name}a = rgba({r}, {g}, {b}, 0.8)')
+
+for i in range(16):
+    hexcolor = a.get(f'color{i}', '#000000')
+    r, g, b = h2r(hexcolor)
+    lines.append(f'\$c{i} = rgb({r}, {g}, {b})')
+    lines.append(f'\$c{i}a = rgba({r}, {g}, {b}, 0.8)')
+
+with open('$HYPRLOCK_COLORS', 'w') as f:
+    f.write('\n'.join(lines) + '\n')
+" 2>&1 || true
+  fi
+  if [[ -f "$WAL_JSON" ]]; then
+    python3 -c "
+import json
+with open('$WAL_JSON') as f:
+    c = json.load(f)
+s = c.get('special', {})
+a = c.get('colors', {})
+
+bg = s.get('background', '#1e1e2e')
+fg = s.get('foreground', '#cdd6f4')
+cursor = s.get('cursor', fg)
+c2 = a.get('color2', '#a6e3a1')
+c4 = a.get('color4', '#89b4fa')
+c8 = a.get('color8', '#585b70')
+c12 = a.get('color12', '#89b4fa')
+
+lines = []
+lines.append('# Pywal Colors for Kitty')
+lines.append('')
+lines.append(f'foreground              {fg}')
+lines.append(f'background              {bg}')
+lines.append(f'selection_foreground    {bg}')
+lines.append(f'selection_background    {fg}')
+lines.append(f'')
+lines.append(f'cursor                  {cursor}')
+lines.append(f'cursor_text_color       {bg}')
+lines.append(f'')
+lines.append(f'url_color               {cursor}')
+lines.append(f'')
+lines.append(f'active_tab_foreground   {c12}')
+lines.append(f'active_tab_background   {bg}')
+lines.append(f'inactive_tab_foreground {c8}')
+lines.append(f'inactive_tab_background {bg}')
+lines.append(f'')
+lines.append(f'mark1_foreground        {bg}')
+lines.append(f'mark1_background        {c4}')
+lines.append(f'mark2_foreground        {bg}')
+lines.append(f'mark2_background        {c12}')
+lines.append(f'mark3_foreground        {bg}')
+lines.append(f'mark3_background        {c2}')
+lines.append(f'')
+
+for i in range(16):
+    lines.append(f'color{i:<2} {a.get(f\"color{i}\", \"#000000\")}')
+
+with open('$HOME/.cache/wal/colors-kitty.conf', 'w') as f:
+    f.write('\n'.join(lines) + '\n')
+" 2>&1 || true
+  fi
+
+  # Copy btop theme
+  mkdir -p "$HOME/.config/btop/themes" 2>/dev/null || true
+  cp "$HOME/.cache/wal/colors-btop.theme" "$HOME/.config/btop/themes/pywal.theme" 2>/dev/null || \
+    cp "$HOME/.cache/wal/colors-btop.theme" "$HOME/.cache/wal/btopwal.theme" 2>/dev/null || true
+
+  # Set wallpaper using awww
+  awww img "$img" --transition-type fade --transition-duration 2
+
+  # Refresh apps
+  systemctl --user restart waybar 2>/dev/null || pkill -SIGUSR2 waybar 2>/dev/null || true
+  pkill -SIGUSR1 swaync 2>/dev/null || true
+
+  # Symlink pywal color files for apps
+  mkdir -p "$HOME/.config/rofi"
+
+  mkdir -p "$HOME/.config/kitty"
+  ln -sf "$HOME/.cache/wal/colors-kitty.conf" "$HOME/.config/kitty/colors-kitty.conf"
+
+  # Update rofi theme with pywal colors
+  cp "$HOME/.cache/wal/config.rasi" "$HOME/.config/rofi/config.rasi" 2>/dev/null || true
+
+  # Generate tmux theme
+  tmux-theme-gen 2>/dev/null || true
+  tmux source-file ~/.config/tmux/theme.conf 2>/dev/null || true
+
+  # Generate opencode theme
+  if [[ -f "$WAL_JSON" ]]; then
+    python3 -c "
+import json
+with open('$WAL_JSON') as f:
+    c = json.load(f)
+s = c.get('special', {})
+a = c.get('colors', {})
+bg = s.get('background', '#0d0d1f')
+fg = s.get('foreground', '#c2c2c7')
+c0 = a.get('color0', '#0d0d1f')
+c1 = a.get('color1', '#463D62')
+c2 = a.get('color2', '#394C67')
+c3 = a.get('color3', '#5D4C5F')
+c4 = a.get('color4', '#836C89')
+c5 = a.get('color5', '#B7A0B2')
+c6 = a.get('color6', '#CBB8D5')
+c7 = a.get('color7', '#c2c2c7')
+c8 = a.get('color8', '#5c5c71')
+theme = {
+    '\$schema': 'https://opencode.ai/theme.json',
+    'defs': {'wal0': c0, 'wal1': c1, 'wal2': c2, 'wal3': c3, 'wal4': c4, 'wal5': c5, 'wal6': c6, 'wal7': c7, 'wal8': c8},
+    'theme': {
+        'primary': 'wal4', 'secondary': 'wal6', 'accent': 'wal4',
+        'error': 'wal1', 'warning': 'wal3', 'success': 'wal2', 'info': 'wal4',
+        'text': 'wal7', 'textMuted': 'wal8', 'selectedListItemText': 'wal0',
+        'background': 'wal0', 'backgroundPanel': 'wal1', 'backgroundElement': 'wal1', 'backgroundMenu': 'wal1',
+        'border': 'wal8', 'borderActive': 'wal4', 'borderSubtle': 'wal8',
+        'diffAdded': 'wal2', 'diffRemoved': 'wal1', 'diffContext': 'wal8', 'diffHunkHeader': 'wal8',
+        'diffHighlightAdded': 'wal2', 'diffHighlightRemoved': 'wal1',
+        'diffAddedBg': 'wal1', 'diffRemovedBg': 'wal1', 'diffContextBg': 'wal1',
+        'diffLineNumber': 'wal8', 'diffAddedLineNumberBg': 'wal1', 'diffRemovedLineNumberBg': 'wal1',
+        'markdownText': 'wal7', 'markdownHeading': 'wal6', 'markdownLink': 'wal4', 'markdownLinkText': 'wal4',
+        'markdownCode': 'wal2', 'markdownBlockQuote': 'wal3', 'markdownEmph': 'wal5', 'markdownStrong': 'wal7',
+        'markdownHorizontalRule': 'wal8', 'markdownListItem': 'wal4', 'markdownListEnumeration': 'wal4',
+        'markdownImage': 'wal4', 'markdownImageText': 'wal4', 'markdownCodeBlock': 'wal7',
+        'syntaxComment': 'wal8', 'syntaxKeyword': 'wal5', 'syntaxFunction': 'wal4', 'syntaxVariable': 'wal7',
+        'syntaxString': 'wal2', 'syntaxNumber': 'wal3', 'syntaxType': 'wal6', 'syntaxOperator': 'wal4',
+        'syntaxPunctuation': 'wal7'
+    }
+}
+with open('$HOME/.config/opencode/themes/pywal.json', 'w') as f:
+    json.dump(theme, f, indent=2)
+" 2>&1 || true
+  fi
+
+  # Reload hyprland colors (sources colors-hyprland.conf via pywal template)
+  hyprctl reload 2>/dev/null || true
+
+  notify-send "wallpaper" "$(basename "$img")"
+}
+
+case "${1:-}" in
+  -i|--interactive)
+    img=$(random_wallpaper)
+    set_wallpaper "$img"
+    ;;
+  -r|--random|"")
+    img=$(random_wallpaper)
+    set_wallpaper "$img"
+    ;;
+  -p|--previous)
+    if [[ -f "$HOME/.cache/wallpaper.prev" ]]; then
+      prev=$(cat "$HOME/.cache/wallpaper.prev")
+      if [[ -f "$prev" ]]; then
+        set_wallpaper "$prev"
+      else
+        notify-send "wallpaper" "Previous wallpaper not found"
+        exit 1
+      fi
+    else
+      notify-send "wallpaper" "No previous wallpaper"
+      exit 1
+    fi
+    ;;
+  -h|--help)
+    usage
+    ;;
+  *)
+    if [[ -f "$1" ]]; then
+      set_wallpaper "$1"
+    else
+      usage
+    fi
+    ;;
+esac

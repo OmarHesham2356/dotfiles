@@ -1,0 +1,105 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+  "positionX": "right",
+  "positionY": "top",
+  "control-center-margin-top": 0,
+  "control-center-margin-bottom": 0,
+  "control-center-margin-right": 0,
+  "control-center-margin-left": 0,
+  "notification-icon-size": 32,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+  "timeout": 10,
+  "timeout-low": 5,
+  "timeout-critical": 0,
+  "fit-to-screen": true,
+  "control-center-width": 400,
+  "control-center-height": 720,
+  "notification-window-width": 350,
+  "keyboard-shortcuts": true,
+  "image-visibility": "when-available",
+  "transition-time": 200,
+  "hide-on-clear": false,
+  "hide-on-action": true,
+  "script-fail-notify": true,
+  "widgets": [
+    "inhibitors",
+    "title",
+    "dnd",
+    "notifications",
+    "mpris",
+    "volume",
+    "buttons-grid"
+  ],
+  "widget-config": {
+    "inhibitors": {
+      "text": "Inhibitors",
+      "button-text": "Clear All",
+      "clear-all-button": true
+    },
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear All"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    "label": {
+      "max-lines": 1,
+      "text": " "
+    },
+    "mpris": {
+      "image-size": 32,
+      "image-radius": 6
+    },
+    "volume": {
+      "label": "Volume"
+    },
+    "buttons-grid": {
+      "buttons-per-row": 3,
+      "actions": [
+        {
+          "label": " Screenshot",
+          "type": "toggle",
+          "command": "hyprshot -m region",
+          "active": false
+        },
+        {
+          "label": " Lock",
+          "type": "toggle",
+          "command": "hyprlock",
+          "active": false
+        },
+        {
+          "label": " Bluetooth",
+          "type": "toggle",
+          "command": "/home/omararch/.local/bin/bluetooth-toggle",
+          "update-command": "/home/omararch/.local/bin/bluetooth-status",
+          "active": false
+        },
+        {
+          "label": "  WiFi",
+          "type": "toggle",
+          "command": "/home/omararch/.local/bin/wifi-toggle",
+          "update-command": "/home/omararch/.local/bin/wifi-status",
+          "active": false
+        },
+        {
+          "label": " Power Save",
+          "type": "toggle",
+          "command": "/home/omararch/.local/bin/power-save-toggle",
+          "update-command": "/home/omararch/.local/bin/power-save-status",
+          "active": false
+        },
+        {
+          "label": " Caffeine",
+          "type": "toggle",
+          "command": "/home/omararch/.local/bin/caffeine-toggle",
+          "update-command": "/home/omararch/.local/bin/caffeine-status",
+          "active": false
+        }
+      ]
+    }
+  }
+}

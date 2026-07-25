@@ -1,0 +1,16 @@
+color_white = {color15}
+color_black = {color0}
+color_light_gray = {color7}
+color_dark_gray = {color8}
+color_light_red = {color1}
+color_dark_red = {color9}
+color_light_green = {color2}
+color_dark_green = {color10}
+color_light_yellow = {color3}
+color_dark_yellow = {color11}
+color_light_blue = {color4}
+color_dark_blue = {color12}
+color_light_magenta = {color5}
+color_dark_magenta = {color13}
+color_light_cyan = {color6}
+color_dark_cyan = {color14}
