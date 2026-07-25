@@ -18,6 +18,7 @@ Hyprland desktop environment configs for Arch Linux.
 | tmux | Terminal multiplexer |
 | nvim | LazyVim with pywal |
 | opencode | Opencode AI config |
+| btop | System monitor with pywal theme |
 | zsh | Zsh with oh-my-zsh |
 | scripts | Utility scripts |
 | wal | Pywal templates |
@@ -29,7 +30,7 @@ git clone https://github.com/OmarHesham2356/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Install everything
-stow hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode zsh scripts wal
+stow hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode btop zsh scripts wal
 
 # Or install individual packages
 stow hypr
@@ -40,7 +41,7 @@ stow waybar
 
 ```bash
 cd ~/dotfiles
-stow -D hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode zsh scripts wal
+stow -D hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode btop zsh scripts wal
 ```
 
 ## Requirements
