@@ -7,3 +7,74 @@ desc = "Open mount manager"
 on = ["c", "w"]
 run = "shell -- \"$HOME/.local/bin/wallpaper\" \"$0\""
 desc = "Set as wallpaper"
+
+# chmod - change file permissions
+[[mgr.prepend_keymap]]
+on = ["c", "m"]
+run = "plugin chmod"
+desc = "chmod"
+
+# smart-enter - open file or enter directory
+[[mgr.prepend_keymap]]
+on = ["<Enter>"]
+run = "plugin smart-enter"
+desc = "Open or enter"
+
+# compress - archive selection
+[[mgr.prepend_keymap]]
+on = ["c", "z"]
+run = "plugin compress"
+desc = "Compress"
+
+# diff - diff with hovered file
+[[mgr.prepend_keymap]]
+on = ["d", "d"]
+run = "plugin diff"
+desc = "Diff"
+
+# rsync - copy with rsync
+[[mgr.prepend_keymap]]
+on = ["R"]
+run = "plugin rsync"
+desc = "Rsync copy"
+
+# clipboard - paste from system clipboard
+[[mgr.prepend_keymap]]
+on = ["<C-p>"]
+run = "plugin clipboard -- --action=paste"
+desc = "Paste from clipboard"
+
+# restore - recover deleted files
+[[mgr.prepend_keymap]]
+on = ["."]
+run = "plugin restore"
+desc = "Restore deleted"
+
+# cd-git-root - jump to git root
+[[mgr.prepend_keymap]]
+on = ["g", "r"]
+run = "plugin cd-git-root"
+desc = "Go to git root"
+
+# lazygit - launch lazygit
+[[mgr.prepend_keymap]]
+on = ["g", "i"]
+run = "plugin lazygit"
+desc = "Lazygit"
+
+# what-size - calculate size
+[[mgr.prepend_keymap]]
+on = [".", "s"]
+run = "plugin what-size"
+desc = "Calc size"
+
+# whoosh - bookmarks menu
+[[mgr.prepend_keymap]]
+on = ["m", "m"]
+run = "plugin whoosh -- open"
+desc = "Bookmarks menu"
+
+[[mgr.prepend_keymap]]
+on = ["m", "a"]
+run = "plugin whoosh -- add"
+desc = "Add bookmark"
