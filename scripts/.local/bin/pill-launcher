@@ -15,7 +15,7 @@ rofi_cmds=(
     "rofi -show run"
     "rofi -show window"
     "rofi -show filebrowser"
-    "rofi -show emoji"
+    "rofi -modi emoji -show emoji"
     "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"
 )
 

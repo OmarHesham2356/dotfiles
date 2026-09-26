@@ -6,7 +6,6 @@ configuration {
   display-run:         " Run";
   display-window:      " Windows";
   display-filebrowser: " Files";
-  display-emoji:       " Emoji";
   drun-display-format: "{icon} {name}";
   window-format:       "{w} {t}";
   disable-history:     false;
