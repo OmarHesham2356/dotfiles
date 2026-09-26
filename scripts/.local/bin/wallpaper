@@ -158,53 +158,11 @@ with open('$GTK_CSS', 'w') as f:
     f.write(css)
 " 2>&1 || true
   fi
-  if [[ -f "$WAL_JSON" ]]; then
-    python3 -c "
-import json
-with open('$WAL_JSON') as f:
-    c = json.load(f)
-s = c.get('special', {})
-a = c.get('colors', {})
-
-def h2r(h):
-    h = h.lstrip('#')
-    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
-
-bg = s.get('background', '#1e1e2e')
-fg = s.get('foreground', '#cdd6f4')
-wp = a.get('wallpaper', '$HOME/Pictures/wallpapers/default.jpg')
-
-lines = []
-lines.append(f'\$wallpaper = {wp}')
-lines.append(f'\$background = {bg}')
-lines.append(f'\$foreground = {fg}')
-
-for i in range(16):
-    hexcolor = a.get(f'color{i}', '#000000')
-    lines.append(f'\$color{i} = {hexcolor}')
-
-def rgba_raw(hex_color, alpha):
-    r, g, b = h2r(hex_color)
-    return f'{r},{g},{b},{alpha}'
-
-c4 = a.get('color4', '#89b4fa')
-c5 = a.get('color5', '#f5c2e7')
-c2 = a.get('color2', '#a6e3a1')
-c8 = a.get('color8', '#585b70')
-c0 = a.get('color0', '#1e1e2e')
-
-lines.append('')
-lines.append('# Pre-computed alpha values (used as rgba(\$var) in hyprland config)')
-lines.append(f'\$color5cc = {rgba_raw(c5, 0.8)}')
-lines.append(f'\$color4cc = {rgba_raw(c4, 0.8)}')
-lines.append(f'\$color2cc = {rgba_raw(c2, 0.8)}')
-lines.append(f'\$color800 = {rgba_raw(c8, 0.0)}')
-lines.append(f'\$color077 = {rgba_raw(c0, 0.467)}')
-
-with open('$HOME/.cache/wal/colors-hyprland.conf', 'w') as f:
-    f.write('\n'.join(lines) + '\n')
-" 2>&1 || true
-  fi
+  # NOTE: hyprland colours are NOT written here. They come from the pywal
+  # template wal/.config/wal/templates/colors-hyprland.lua, which emits a Lua
+  # module that hyprland.lua loadfile()s. This script used to write its own
+  # hyprlang colors-hyprland.conf here, which raced with that template and
+  # clobbered it (and only half of it, so rgba($color5cc) expanded to rgba()).
   if [[ -f "$WAL_JSON" ]]; then
     python3 -c "
 import json
@@ -354,7 +312,9 @@ with open('$HOME/.config/opencode/themes/pywal.json', 'w') as f:
 " 2>&1 || true
   fi
 
-  # Reload hyprland colors (sources colors-hyprland.conf via pywal template)
+  # Re-run hyprland.lua so it re-loads ~/.cache/wal/colors-hyprland.lua and the
+  # new palette takes effect. Plain `reload` re-executes the Lua config, which
+  # calls loadfile() again, so no full-reset is needed.
   hyprctl reload 2>/dev/null || true
 
   notify-send "wallpaper" "$(basename "$img")"
