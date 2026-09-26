@@ -4,6 +4,8 @@
 # fastfetch produces console output on startup; quiet mode suppresses the
 # instant-prompt warning while keeping instant prompt enabled.
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+# gitstatusd fix: patched ~/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/gitstatus.plugin.zsh
+# (setopt monitor || return -> setopt monitor 2>/dev/null || true) for zsh 5.9+ compat.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
