@@ -47,7 +47,6 @@ window#waybar {
 }
 
 #mpris,
-#cava,
 #custom-cpu,
 #custom-memory,
 #pulseaudio,
@@ -66,10 +65,6 @@ window#waybar {
 }
 
 #mpris.paused {
-  color: @color8;
-}
-
-#cava.silent {
   color: @color8;
 }
 
