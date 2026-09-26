@@ -73,6 +73,11 @@ hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("GTK_THEME", "Adwaita-dark")
+hl.env("GTK_BACKEND", "wayland")
+hl.env("CLUTTER_BACKEND", "wayland")
+-- Intel VA-API on Wayland (iHD driver)
+hl.env("LIBVA_DRIVER_NAME", "iHD")
+hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
 
 -- ~/.local/bin holds the helper scripts bound below (audio-switcher,
 -- record-screen, scratchpad, ...). A GUI login session gets its PATH from PAM,
