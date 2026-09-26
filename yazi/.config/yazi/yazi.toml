@@ -1,9 +1,9 @@
 [opener]
 edit = [
-  { run = "vim %s", desc = "vim", for = "unix", block = true },
+  { run = "nvim %s", desc = "nvim", for = "unix", block = true },
 ]
 pdf = [
-  { run = "zen-browser '$@'", block = false, for = "unix" },
+  { run = "xdg-open '$@'", block = false, for = "unix" },
 ]
 extract = [
   { run = "ouch d -y '$@'", desc = "Extract here with ouch", for = "unix" },

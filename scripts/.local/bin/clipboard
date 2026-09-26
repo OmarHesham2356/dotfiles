@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 # Clipboard manager using cliphist + rofi with pywal theme
-cliphist list | rofi -dmenu -show clipboard -p " " -theme ~/.config/rofi/pywal.rasi | cliphist decode | wl-copy
+cliphist list | rofi -dmenu -show clipboard -p " " -theme ~/.config/rofi/config.rasi:~/.cache/wal/colors-rofi.rasi | cliphist decode | wl-copy

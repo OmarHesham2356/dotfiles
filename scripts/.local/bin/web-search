@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Web search using rofi + firefox
-query=$(rofi -dmenu -p "  Search " -theme-str 'window {width: 500px;}')
+# Web search using rofi + the system default browser
+query=$(rofi -dmenu -p "  Search " -theme ~/.config/rofi/config.rasi:~/.cache/wal/colors-rofi.rasi -theme-str 'window {width: 500px;}')
 if [ -n "$query" ]; then
-  firefox "https://duckduckgo.com/?q=$query" &
+  # urlencode the query so spaces and special characters survive
+  encoded=$(printf '%s' "$query" | jq -sRr @uri)
+  xdg-open "https://duckduckgo.com/?q=$encoded" >/dev/null 2>&1 &
 fi

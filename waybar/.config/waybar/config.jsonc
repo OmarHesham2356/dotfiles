@@ -3,7 +3,7 @@
   "position": "top",
   "height": 28,
   "spacing": 4,
-  "modules-left": ["hyprland/workspaces", "mpris", "cava"],
+  "modules-left": ["hyprland/workspaces", "mpris"],
   "modules-center": ["clock"],
   "modules-right": ["custom/cpu", "custom/memory", "pulseaudio", "backlight", "hyprland/language", "network", "battery", "power-profiles-daemon", "tray", "custom/power"],
 
@@ -43,15 +43,6 @@
     "on-click": "playerctl play-pause",
     "on-click-right": "playerctl next",
     "on-click-middle": "playerctl previous"
-  },
-
-  "cava": {
-    "cava_config": "/home/omararch/.config/cava/waybar.conf",
-    "input_delay": 2,
-    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-    "actions": {
-      "on-click-middle": "mode"
-    }
   },
 
   "clock": {

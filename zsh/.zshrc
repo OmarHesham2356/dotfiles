@@ -4,9 +4,17 @@ plugins=(git z sudo)
 
 source $ZSH/oh-my-zsh.sh
 
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
+# Plugins live in oh-my-zsh's custom directory on Arch (not /usr/share/zsh).
+# Guarded so a missing plugin degrades quietly instead of erroring every shell.
+for _plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+  [[ -r "$ZSH_CUSTOM/plugins/$_plugin/$_plugin.zsh" ]] && source "$ZSH_CUSTOM/plugins/$_plugin/$_plugin.zsh"
+done
+unset _plugin
+
+[[ -r "$ZSH_CUSTOM/plugins/fzf-tab/fzf-tab.plugin.zsh" ]] && source "$ZSH_CUSTOM/plugins/fzf-tab/fzf-tab.plugin.zsh"
+
+# fzf-tab must be sourced after compinit
+autoload -Uz compinit && compinit
 
 alias lg='lazygit'
 
@@ -37,7 +45,11 @@ alias ports='ss -tlnp'
 
 eval "$(zoxide init zsh)"
 
-export PATH="$HOME/.local/bin:$PATH"
+# ~/.local/bin is also exported system-wide via /etc/environment so that GUI
+# sessions (Hyprland keybinds) find the helper scripts. Guard against a dup.
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
 export GTK_THEME="Adwaita-dark"
 
 zstyle ':completion:*:git-checkout:*' sort false
@@ -47,5 +59,3 @@ zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --style=numbers -
 zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' fzf-flags --height=80% --layout=reverse --border --margin=10%,20% --preview-window=right:50%
-
-fetch -l arch
