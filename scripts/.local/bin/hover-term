@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Open/Toggle a floating terminal window over the current workspace
+# Can also be used to open in current directory or run commands
+
+ACTION="${1:-toggle}"
+
+case "$ACTION" in
+    toggle)
+        # Check if hover-term is running
+        if hyprctl clients | grep -q "class: hover-term"; then
+            hyprctl dispatch closewindow class:hover-term 2>/dev/null
+        else
+            kitty --class hover-term \
+                  --override background_opacity=0.95 \
+                  --override window_padding_width=10 \
+                  -e zsh -c "cd $(pwd); zsh" &
+            sleep 0.3
+            hyprctl dispatch movewindowpixel exact 50 100,class:hover-term 2>/dev/null
+            hyprctl dispatch resizewindowpixel exact 1820 600,class:hover-term 2>/dev/null
+        fi
+        ;;
+    open)
+        kitty --class hover-term \
+              --override background_opacity=0.95 \
+              --override window_padding_width=10 &
+        sleep 0.3
+        hyprctl dispatch movewindowpixel exact 50 100,class:hover-term 2>/dev/null
+        hyprctl dispatch resizewindowpixel exact 1820 600,class:hover-term 2>/dev/null
+        ;;
+esac

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# TUI wallpaper picker with image preview (fzf + chafa)
+# Usage: wpick [directory]   (default: ~/Pictures/wallpapers)
+
+set -euo pipefail
+
+# Handle help
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+    cat <<'EOF'
+wpick - TUI wallpaper picker with preview
+Usage: wpick [directory]
+  directory: folder containing images (default: ~/Pictures/wallpapers)
+Keys:
+  Enter    - set wallpaper
+  Ctrl-R   - refresh list
+  Esc      - cancel
+EOF
+    exit 0
+fi
+
+WALL_DIR="${1:-$HOME/Pictures/wallpapers}"
+
+if [[ ! -d "$WALL_DIR" ]]; then
+    echo "Directory not found: $WALL_DIR" >&2
+    exit 1
+fi
+
+# Find images (common formats)
+mapfile -t IMAGES < <(find "$WALL_DIR" -maxdepth 1 -type f \( \
+    -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o \
+    -iname "*.webp" -o -iname "*.bmp" -o -iname "*.gif" \) | sort)
+
+if [[ ${#IMAGES[@]} -eq 0 ]]; then
+    echo "No images found in $WALL_DIR" >&2
+    exit 1
+fi
+
+# Preview command using chafa (works in kitty, foot, wezterm, etc.)
+# Use smaller size for fzf preview window
+if command -v chafa >/dev/null 2>&1; then
+    PREVIEW_CMD='chafa -f sixel -s "$(($FZF_PREVIEW_COLUMNS))x$FZF_PREVIEW_LINES" --animate=off --polite=on "{}" 2>/dev/null || file -b "{}"'
+else
+    PREVIEW_CMD='file -b "{}"'
+fi
+
+# Use fzf with preview
+SELECTED=$(printf '%s\n' "${IMAGES[@]}" |
+    fzf --height=100% --layout=reverse --border \
+        --prompt='Wallpaper > ' \
+        --preview="$PREVIEW_CMD" \
+        --preview-window=right:60%:wrap \
+        --bind='ctrl-r:reload(find "$WALL_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.bmp" -o -iname "*.gif" \) | sort)' \
+        --header='Enter: set | Ctrl-R: refresh | Esc: cancel' \
+        --no-sort)
+
+[[ -z "$SELECTED" ]] && exit 0
+
+# Call the existing wallpaper script
+exec wallpaper "$SELECTED"

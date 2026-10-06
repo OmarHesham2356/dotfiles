@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Notes launcher - quickly access notes
+NOTES_DIR="${NOTES_DIR:-$HOME/notes}"
+mkdir -p "$NOTES_DIR"
+
+options=(
+    "  New note"
+    "  Browse notes"
+    "  Quick notes (global)"
+    "  Project notes"
+)
+
+selected=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Notes" -i -width 400 -lines 10 2>/dev/null)
+
+if [[ -z "$selected" ]]; then
+    exit 0
+fi
+
+case "$selected" in
+    "  New note")
+        note=$(echo "" | rofi -dmenu -p "Note name" 2>/dev/null)
+        if [[ -n "$note" ]]; then
+            kitty --class notes -e nvim "$NOTES_DIR/${note}.md" 2>&1 &
+        fi
+        ;;
+    "  Browse notes")
+        kitty --class notes -e nvim "$NOTES_DIR" 2>&1 &
+        ;;
+    "  Quick notes (global)")
+        kitty --class notes -e nvim ~/notes.md 2>&1 &
+        ;;
+    "  Project notes")
+        project-launcher 2>&1 &
+        ;;
+esac

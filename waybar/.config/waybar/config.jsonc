@@ -1,17 +1,91 @@
 {
+  // Noctra-style Dynamic Island notch, adapted for this machine.
+  //
+  //  - margin-top: 0 + everything in modules-center = the island hangs from
+  //    the top edge instead of floating. Noctra's signature shape.
+  //  - margin-left/right are GONE (they were 420): a hard 420px inset fought
+  //    the centring and clipped the island on wide layouts.
+  //  - your dual-monitor persistent workspaces and custom modules are kept.
   "layer": "top",
   "position": "top",
-  "height": 28,
-  "spacing": 4,
-  "modules-left": ["hyprland/workspaces", "mpris"],
-  "modules-center": ["clock"],
-  "modules-right": ["custom/cpu", "custom/memory", "pulseaudio", "backlight", "hyprland/language", "network", "battery", "power-profiles-daemon", "tray", "custom/power"],
+  "height": 40,
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "spacing": 0,
+
+  "modules-left": [],
+  // Everything lives in ONE modules-center group, so the notch is a single
+  // continuous shape. The clock is centred inside it by two measured
+  // spacers: waybar has no "centre this module" primitive, so the only way
+  // to centre the clock within a single group is to balance the rendered
+  // width either side of it.
+  //
+  // Everything except workspaces + mpris sits on the RIGHT of the clock, in
+  // the original order. The right side is then ~460px heavier than the left,
+  // and the spacer below absorbs that whole difference to keep the clock
+  // centred -- which is why the gap before the clock is large.
+  "modules-left": [],
+  "modules-center": [
+    "hyprland/workspaces",
+    "mpris",
+    "custom/spacer-l",
+    "clock",
+    "custom/spacer-r",
+    "custom/cpu",
+    "custom/memory",
+    "pulseaudio",
+    "backlight",
+    "hyprland/language",
+    "network",
+    "battery",
+    "power-profiles-daemon",
+    "tray",
+    "custom/power"
+  ],
+  "modules-right": [],
+
+  // Spacers that centre the clock inside the island.
+  // These use "exec" rather than "text": waybar v0.15 renders a custom module
+  // with no "exec" at zero width, so a "text"-only spacer is a silent no-op.
+  // One space measures 8.00px (JetBrainsMono 13px, 0.6em advance).
+  "custom/spacer-l": {
+    // 30 spaces = 240px. Calibrated by scripts/center-clock.py, which probes
+    // the rendered bar and solves for the exact correction instead of
+    // guessing. The clock is centred by making the rendered width to its
+    // left equal the width to its right; this spacer absorbs the difference.
+    //
+    // #mpris is pinned to a fixed min-width in style.css precisely so this
+    // number stays valid -- an unpinned mpris changes width with the song
+    // title and drags the clock off centre.
+    //
+    // Re-calibrate after adding/removing a module, or run:
+    //   python3 ~/.config/waybar/scripts/center-clock.py --calibrate
+    // 29 spaces (232px) plus one 4px hair-space glyph (~4px) = ~236px,
+    // which is the half-space between the 29-space and 30-space solutions.
+    // Both whole-space settings measured +-4px off centre, so the true
+    // optimum is 29.5 spaces and the hair-space lands on it.
+    "exec": "printf '%*s\u2009' 29 ''",
+    "interval": 3600,
+    "tooltip": false
+  },
+
+  "custom/spacer-r": {
+    // 8 spaces, the minimum that still separates the clock from the cpu
+    // module. Kept small so the correction lands entirely on the left.
+    "exec": "printf '%*s' 8 ''",
+    "interval": 3600,
+    "tooltip": false
+  },
 
   "hyprland/workspaces": {
     "format": "{icon}",
     "move-to-monitor": true,
     "on-click": "activate",
     "sort-by-number": true,
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
     "format-icons": {
       "1": "1",
       "2": "2",
@@ -37,22 +111,23 @@
     "status-icons": { "paused": "⏸" },
     "player-icons": { "default": "▶" },
     "artist-len": 15,
-    "title-len": 25,
+    "title-len": 22,
     "album-len": 12,
-    "dynamic-len": 35,
+    "dynamic-len": 30,
     "on-click": "playerctl play-pause",
     "on-click-right": "playerctl next",
     "on-click-middle": "playerctl previous"
   },
 
   "clock": {
+    // Noctra pads the format with spaces; the pill geometry does the spacing.
     "format": "{:%I:%M %p}",
     "format-alt": "{:%a %b %d}",
     "tooltip-format": "{:%A, %B %d, %Y}",
     "interval": 30,
     "calendar": {
       "format": {
-        "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
+        "today": "<span color='#e8e6e6'><b><u>{}</u></b></span>"
       }
     }
   },
@@ -61,15 +136,15 @@
     "format": "{icon} {volume}%",
     "format-muted": "{icon} M",
     "format-icons": {
-      "default": ["\uf026", "\uf027", "\uf028"]
+      "default": ["", "", ""]
     },
     "on-click": "pavucontrol",
     "scroll-step": 5
   },
 
   "network": {
-    "format-wifi": "\uf1eb {signalStrength}%",
-    "format-ethernet": "\uf1eb",
+    "format-wifi": " {signalStrength}%",
+    "format-ethernet": "",
     "format-disconnected": "\uf127",
     "tooltip-format": "{ifname} via {gwaddr}",
     "interval": 30
@@ -83,6 +158,8 @@
     "format": "{icon} {capacity}%",
     "format-charging": "\uf0e7 {capacity}%",
     "format-plugged": "\uf0e7 {capacity}%",
+    // Nerd Font battery glyphs, written as \u escapes so they cannot be
+    // stripped: PUA codepoints (U+F0xx) do not survive a plain-text rewrite.
     "format-icons": ["\uf244", "\uf243", "\uf242", "\uf241", "\uf240"],
     "tooltip-format": "{timeTo} {power}"
   },
@@ -95,7 +172,7 @@
   },
 
   "backlight": {
-    "format": "\u2600 {percent}%",
+    "format": "☀ {percent}%",
     "scroll-step": 5,
     "on-scroll-up": "brightnessctl set 5%+",
     "on-scroll-down": "brightnessctl set 5%-"
@@ -121,6 +198,8 @@
   "power-profiles-daemon": {
     "format": "{icon}",
     "tooltip-format": "{profile}",
+    // \u escapes: performance=lightning, balanced=speedometer,
+    // power-saver=battery, default=lightning.
     "format-icons": {
       "default": "\uf0e7",
       "performance": "\uf0e7",
@@ -131,11 +210,12 @@
 
   "tray": {
     "icon-size": 16,
-    "spacing": 4
+    "spacing": 6
   },
 
+
   "custom/power": {
-    "format": "\u23fb",
+    "format": "⏻",
     "on-click": "/home/omararch/.local/bin/powermenu",
     "tooltip": false
   }

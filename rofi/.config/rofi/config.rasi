@@ -6,6 +6,7 @@ configuration {
   display-run:         " Run";
   display-window:      " Windows";
   display-filebrowser: " Files";
+  display-emoji:       " Emoji";
   drun-display-format: "{icon} {name}";
   window-format:       "{w} {t}";
   disable-history:     false;
@@ -22,9 +23,9 @@ window {
   location:         center;
   anchor:           center;
   width:            540px;
-  background-color: #0d0d1f55;
+  background-color: #0b040455;
   border:           1px;
-  border-color:     #B7A0B2aa;
+  border-color:     #C1BFBDaa;
   border-radius:    20px;
   padding:          0px;
 }
@@ -42,18 +43,18 @@ inputbar {
 }
 
 prompt {
-  background-color: #B7A0B2;
-  text-color:       #0d0d1f;
+  background-color: #C1BFBD;
+  text-color:       #0b0404;
   padding:          9px 16px;
   border-radius:    999px;
   margin:           0px 10px 0px 0px;
 }
 
 entry {
-  background-color: #5c5c7188;
-  text-color:       #c2c2c7;
+  background-color: #66545488;
+  text-color:       #c2c0c0;
   placeholder:      "  Search apps, run command...";
-  placeholder-color: #5c5c71cc;
+  placeholder-color: #665454cc;
   padding:          10px 18px;
   border-radius:    999px;
   cursor:           text;
@@ -98,42 +99,42 @@ element-text {
 element normal.normal,
 element alternate.normal {
   background-color: transparent;
-  text-color:       #5c5c71;
+  text-color:       #665454;
 }
 
 element selected.normal {
-  background-color: #B7A0B244;
-  text-color:       #c2c2c7;
+  background-color: #C1BFBD44;
+  text-color:       #c2c0c0;
   border:           1px;
-  border-color:     #B7A0B2aa;
+  border-color:     #C1BFBDaa;
   border-radius:    12px;
 }
 
 element normal.urgent,
 element alternate.urgent {
   background-color: transparent;
-  text-color:       #463D62;
+  text-color:       #81807F;
 }
 
 element selected.urgent {
-  background-color: #463D6244;
-  text-color:       #c2c2c7;
+  background-color: #81807F44;
+  text-color:       #c2c0c0;
   border:           1px;
-  border-color:     #463D62aa;
+  border-color:     #81807Faa;
   border-radius:    12px;
 }
 
 element normal.active,
 element alternate.active {
   background-color: transparent;
-  text-color:       #394C67;
+  text-color:       #939190;
 }
 
 element selected.active {
-  background-color: #394C6744;
-  text-color:       #c2c2c7;
+  background-color: #93919044;
+  text-color:       #c2c0c0;
   border:           1px;
-  border-color:     #394C67aa;
+  border-color:     #939190aa;
   border-radius:    12px;
 }
 
@@ -143,8 +144,8 @@ message {
 }
 
 textbox {
-  background-color: #5c5c7188;
-  text-color:       #c2c2c7;
+  background-color: #66545488;
+  text-color:       #c2c0c0;
   padding:          8px 14px;
   border-radius:    12px;
 }

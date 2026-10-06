@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Project launcher - select and open projects in nvim or terminal
+# Uses rofi to select from a configured projects directory
+
+PROJECTS_DIR="${PROJECTS_DIR:-$HOME/Projects}"
+NOTES_DIR="${NOTES_DIR:-$HOME/notes/projects}"
+
+mkdir -p "$NOTES_DIR"
+
+# Find all directories in PROJECTS_DIR (max depth 2)
+mapfile -t projects < <(find "$PROJECTS_DIR" -maxdepth 2 -type d -not -path "*/.*" | sort | sed "s|$PROJECTS_DIR/||" | grep -v "^$")
+
+# Add special options
+options=(
+    "  New project note"
+    "  Open notes dir"
+    "  Terminal here"
+)
+
+# Add projects
+for p in "${projects[@]}"; do
+    [[ -n "$p" ]] && options+=("  $p")
+done
+
+selected=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Projects" -i -width 500 -lines 20 2>/dev/null)
+
+if [[ -z "$selected" ]]; then
+    exit 0
+fi
+
+case "$selected" in
+    "  New project note")
+        note=$(echo "" | rofi -dmenu -p "Note name" 2>/dev/null)
+        if [[ -n "$note" ]]; then
+            kitty --class notes -e nvim "$NOTES_DIR/${note}.md" 2>/dev/null &
+        fi
+        ;;
+    "  Open notes dir")
+        kitty --class notes -e nvim "$NOTES_DIR" 2>/dev/null &
+        ;;
+    "  Terminal here")
+        kitty --class project-term -e zsh -c "cd $PROJECTS_DIR && zsh" 2>/dev/null &
+        ;;
+    *)
+        # Extract project name
+        proj=$(echo "$selected" | sed 's/^  //')
+        full_path="$PROJECTS_DIR/$proj"
+        if [[ -d "$full_path" ]]; then
+            # Ask what to do - open in nvim or in terminal
+            action=$(echo -e "Neovim\nTerminal\nNotes" | rofi -dmenu -p "Open $proj" -width 300 2>/dev/null)
+            case "$action" in
+                "Neovim")
+                    kitty --class project-nvim -e nvim "$full_path" 2>/dev/null &
+                    ;;
+                "Terminal")
+                    kitty --class project-term -e zsh -c "cd $full_path && zsh" 2>/dev/null &
+                    ;;
+                "Notes")
+                    note_file="$NOTES_DIR/${proj//\//-}.md"
+                    touch "$note_file"
+                    kitty --class notes -e nvim "$note_file" 2>/dev/null &
+                    ;;
+            esac
+        fi
+        ;;
+esac

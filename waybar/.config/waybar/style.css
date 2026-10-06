@@ -1,99 +1,304 @@
 @import "/home/omararch/.cache/wal/colors-waybar.css";
 
+/* ══════════════════════════════════════════════════════════════════════════
+   Noctra-style Dynamic Island notch — greyscale Material ramp
+   ══════════════════════════════════════════════════════════════════════════
+
+   Design language replicated from Blaze2216/dotfiles (Noctra OS):
+     • bar hangs from the top edge as a notch, not a floating pill
+     • one centre module group, everything lives in the island
+     • full-pill geometry (9999px) on every module
+     • static min-width on workspaces to stop layout jitter
+     • urgent blink animation
+
+   Adapted for this machine:
+     • NOCTRA IS LANDING, NOT FLOATING. `margin-top: 0` with
+       `border-radius: 0 0 25px 25px` also solves the square-corner bug: a
+       shape that is open at the top has no top corners for the compositor to
+       blur into hard edges. Rounded only where the eye sees a silhouette.
+     • COLOUR IS GREYSCALE BY NECESSITY. The wallpaper (miyamoto-musashi,
+       black-and-white manga) has 0% median saturation, so every pywal colour
+       is within ~2% saturation of every other one. Hierarchy is therefore
+       built from VALUE and OPACITY, not hue — which is why the bar reads
+       cleanly instead of flat. See the role map below.
+     • pywal roles kept as the source of truth; `wal <img>` still re-themes.
+     • compositor blur stays OFF (see hyprland.lua layer_rule) so the notch
+       corners stay crisp.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Material role map ──────────────────────────────────────────────────────
+   With a 1-2% saturation palette, hue is useless for distinction, so each
+   role is separated by lightness instead. Spacing between steps is
+   deliberate — roughly 12-15% value apart, which stays legible on the
+   near-black #0b0404 base.
+   ────────────────────────────────────────────────────────────────────────── */
+@define-color surface          #141212;   /* island body: just above bg  */
+@define-color surface_variant  #1e1b1b;   /* hover / nested surfaces     */
+@define-color surface_high     #2a2626;   /* strongest neutral fill      */
+@define-color on_surface       #c2c0c0;   /* primary text                */
+@define-color on_surface_var   #8a8787;   /* secondary / idle text       */
+@define-color outline          #3a3535;   /* separators, hairlines       */
+@define-color outline_var      #2e2a2a;   /* faintest dividers           */
+@define-color primary          #e8e6e6;   /* ACTIVE WORKSPACE — near-white*/
+@define-color on_primary       #0b0404;   /* text on the active pill     */
+@define-color error            #9e5f5f;   /* muted desaturated red       */
+
+/* ── Global reset ─────────────────────────────────────────────────────────── */
 * {
   border: none;
   border-radius: 0;
-  font-family: JetBrainsMono Nerd Font, JetBrainsMono Nerd Font Mono, sans-serif;
-  font-size: 12px;
+  font-family: "JetBrainsMono Nerd Font Propo", "JetBrainsMono NF", monospace;
+  font-size: 13px;
   min-height: 0;
   padding: 0;
   margin: 0;
+  /* Paint-only transitions: compositor-friendly, no layout jank. */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 window#waybar {
   background: transparent;
-  color: @foreground;
 }
 
+/* ── The Dynamic Island ────────────────────────────────────────────────────
+   The clock IS the island. waybar pins modules-center to the geometric
+   centre of the bar, so the clock is always centred with no spacers and no
+   drift as module widths change.
+
+   Every module lives in the single modules-center group, so the whole bar
+   is one continuous painted shape.
+
+   padding is 7px vertical: the tallest module (a workspace button) is
+   ~26px, so 7+26+7 = 40px, exactly filling the bar. That makes the notch reach
+   y=0 and hang from the top edge, with the rounding only on the bottom --
+   and an open top edge is precisely why the compositor blur can never
+   square off the corners.
+   ────────────────────────────────────────────────────────────────────────── */
+.modules-center {
+  background-color: @surface;
+  border-radius: 0 0 25px 25px;
+  padding: 7px 16px;
+  /* Restrained: a wide soft shadow on a top-anchored shape reads as a
+     groove. Strong shadows here just smear the notch edges. */
+  box-shadow: 0 3px 14px 0 alpha(#000000, 0.55);
+}
+
+
+/* ── Shared module base ─────────────────────────────────────────────────────
+   Full-pill geometry on every module, per the Noctra language.
+   ────────────────────────────────────────────────────────────────────────── */
+#workspaces,
+#clock,
+#pulseaudio,
+#network,
+#battery,
+#tray,
+#custom-cpu,
+#custom-memory,
+#backlight,
+#language,
+#power-profiles-daemon,
+#mpris,
+#custom-power {
+  background: transparent;
+  padding: 3px 10px;
+  margin: 0 1px;
+  color: @on_surface_var;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover: a visible step up in value, the only affordance a greyscale bar has. */
+#workspaces button:hover,
+#pulseaudio:hover,
+#network:hover,
+#battery:hover,
+#backlight:hover,
+#language:hover,
+#power-profiles-daemon:hover,
+#custom-power:hover,
+#tray:hover,
+#mpris:hover,
+#custom-cpu:hover,
+#custom-memory:hover {
+  background: @surface_variant;
+  color: @on_surface;
+}
+
+/* ── Clock: the centrepiece, so it gets the strongest text ──────────────────
+   No margin nudge here: GTK silently ignores negative margins on this
+   widget (verified -- a -40px test produced zero pixel change), so the
+   sub-space centring correction has to live in the spacer module instead.
+   See custom/spacer-l in config.jsonc. */
+#clock {
+  color: @on_surface;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 3px 14px;
+}
+
+/* ── Workspaces: jitter-free ───────────────────────────────────────────────
+   The STATIC min-width is the real fix from Noctra. Without it the bar
+   reflows horizontally every time the active workspace changes width.
+   ────────────────────────────────────────────────────────────────────────── */
 #workspaces {
+  padding: 0 2px;
   margin: 0 4px;
 }
 
 #workspaces button {
-  padding: 0 10px;
-  margin: 0 1px;
+  box-shadow: none;
   background: transparent;
-  color: @foreground;
-  border: none;
-  font-size: 11px;
-  min-width: 20px;
+  color: @on_surface_var;
+  border-radius: 9999px;
+  padding: 3px 0;
+  min-width: 26px;   /* static: no jitter */
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #workspaces button:hover {
-  color: @color4;
+  color: @on_surface;
+  background: @surface_variant;
 }
 
+/* Active workspace: a filled near-white pill with dark text. Maximum
+   contrast available in a greyscale palette, and the bar's focal point. */
 #workspaces button.active {
-  color: @color4;
+  color: @on_primary;
+  background: @primary;
+  font-weight: 700;
+  /* no width/height change here — that is what causes jitter */
 }
 
 #workspaces button.urgent {
-  color: @color1;
+  animation: urgent-blink 800ms steps(4) infinite alternate;
 }
 
-#clock {
-  padding: 0 8px;
-  color: @foreground;
+@keyframes urgent-blink {
+  to { background-color: @error; color: #f0e8e8; }
 }
 
-#mpris,
+/* ── Status colouring: value steps, since hue cannot carry state ──────────── */
+#custom-cpu      { color: @on_surface; }
+#custom-memory   { color: @on_surface; }
+#pulseaudio      { color: @on_surface_var; }
+#backlight       { color: @on_surface_var; }
+#language        { color: @on_surface_var; font-weight: 600; font-size: 12px; }
+#network         { color: @on_surface_var; }
+#battery         { color: @on_surface_var; }
+#power-profiles-daemon { color: @on_surface_var; font-size: 12px; }
+
+/* Degraded states: dim rather than recolour. */
+#pulseaudio.muted,
+#network.disconnected,
+#network.disabled,
+#network.muted {
+  color: @outline;
+}
+
+/* Media
+
+   min-width pins mpris to a constant width. This is load-bearing, not
+   cosmetic: the clock is centred by balancing the rendered width either side
+   of it, and mpris is the only left-hand module whose width changes with
+   content. Left to itself it grows and shrinks with the song title, which
+   drags the clock off centre by up to ~130px. Pinning it means the left side
+   of the bar is a fixed width, so the clock stays put.
+
+   The values below are sized so the pinned width always exceeds the
+   truncated text, so the label never overflows its box. */
+#mpris {
+  color: @on_surface_var;
+  font-size: 12px;
+  min-width: 268px;
+}
+#mpris .label { font-weight: 600; }
+#mpris.playing { color: @on_surface; }
+#mpris.paused  { color: @outline; }
+
+/* Battery urgency: the one place a desaturated red earns its keep. */
+#battery.charging,
+#battery.plugged {
+  color: @on_surface;
+}
+
+#battery.warning:not(.charging) {
+  color: @error;
+  animation: battery-warn 2.5s steps(6) infinite alternate;
+}
+
+#battery.critical:not(.charging) {
+  color: @error;
+  font-weight: 700;
+  animation: battery-critical 0.6s steps(4) infinite alternate;
+}
+
+@keyframes battery-warn { to { color: #c98a8a; } }
+@keyframes battery-critical { to { color: #f0d0d0; } }
+
+/* Power profiles: the performance profile is the "loud" one. */
+#power-profiles-daemon.performance  { color: @primary; font-weight: 700; }
+#power-profiles-daemon.balanced     { color: @on_surface; }
+#power-profiles-daemon.power-saver  { color: @outline; }
+
+/* ── Separators: short ticks, not full-height rules ────────────────────────
+   Grouped with margin so the island never looks like a dotted line.
+   ────────────────────────────────────────────────────────────────────────── */
 #custom-cpu,
 #custom-memory,
 #pulseaudio,
 #backlight,
 #language,
 #network,
-#battery,
-#power-profiles-daemon {
-  padding: 0 8px;
-  color: @foreground;
-  border-right: 1px solid alpha(@foreground, 0.15);
+#battery {
+  margin-right: 3px;
+  border-right: 1px solid @outline_var;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
-#mpris.playing {
-  color: @color2;
-}
-
-#mpris.paused {
-  color: @color8;
-}
-
-#pulseaudio.muted {
-  color: @color1;
-}
-
-#network.disconnected {
-  color: @color8;
-}
-
-#battery.warning {
-  color: @color3;
-}
-
-#battery.critical {
-  color: @color1;
-}
-
-#battery.charging {
-  color: @color2;
-}
-
-#tray {
-  padding: 0 4px;
-  color: @foreground;
-}
-
+/* ── Power button: the one destructive action, so it gets the strongest
+      neutral treatment available ────────────────────────────────────────── */
 #custom-power {
-  padding: 0 10px;
-  color: @color1;
+  color: @on_surface;
+  font-size: 14px;
+  margin-left: 4px;
+  padding: 2px 12px;
+}
+
+#custom-power:hover {
+  background: @surface_high;
+  color: @primary;
+}
+
+/* ── Tray ─────────────────────────────────────────────────────────────────── */
+#tray {
+  padding: 3px 8px;
+  color: @on_surface_var;
+}
+
+#tray > .passive {
+  opacity: 0.5;
+}
+
+#tray > .passive:hover {
+  opacity: 1.0;
+}
+
+#tray > .active {
+  opacity: 1.0;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────────── */
+tooltip {
+  background-color: @surface_high;
+  border: 1px solid @outline;
+  border-radius: 12px;
+  padding: 5px 9px;
+}
+
+tooltip label {
+  color: @on_surface;
 }

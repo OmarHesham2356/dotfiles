@@ -267,6 +267,9 @@ with open('$HOME/.cache/wal/colors-kitty.conf', 'w') as f:
   tmux source-file ~/.config/tmux/theme.conf 2>/dev/null || true
 
   # Generate opencode theme
+  # The directory must exist BEFORE the heredoc below writes into it, otherwise
+  # the python open() raises FileNotFoundError and the `|| true` swallows it.
+  mkdir -p "$HOME/.config/opencode/themes"
   if [[ -f "$WAL_JSON" ]]; then
     python3 -c "
 import json
