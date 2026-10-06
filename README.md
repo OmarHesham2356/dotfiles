@@ -30,7 +30,7 @@ git clone https://github.com/OmarHesham2356/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Install everything
-stow hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode btop zsh scripts wal
+stow hypr waybar kitty rofi swaync fastfetch cava yazi gtk tmux nvim opencode btop zsh scripts wal fontconfig herdr
 
 # Or install individual packages
 stow hypr

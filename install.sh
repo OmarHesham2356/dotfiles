@@ -9,7 +9,7 @@
 set -euo pipefail
 
 STOW_PACKAGES=(
-  btop cava fastfetch gtk hypr kitty nvim opencode rofi
+  btop cava fastfetch fontconfig gtk herdr hypr kitty nvim opencode rofi
   scripts swaync tmux wal waybar yazi zsh
 )
 
@@ -58,8 +58,14 @@ echo "==> 3/5  zsh plugins (shallow clones)"
 clone_shallow https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 clone_shallow https://github.com/zsh-users/zsh-autosuggestions.git \
   "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-clone_shallow https://github.com/zsh-users/zsh-syntax-highlighting.git \
-  "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+# .zshrc sources fast-syntax-highlighting (not zsh-syntax-highlighting),
+# plus zsh-completions and zsh-history-substring-search via the plugins array.
+clone_shallow https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
+  "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
+clone_shallow https://github.com/zsh-users/zsh-completions.git \
+  "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+clone_shallow https://github.com/zsh-users/zsh-history-substring-search.git \
+  "$HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search"
 clone_shallow https://github.com/zdharma-continuum/fzf-tab.git \
   "$HOME/.oh-my-zsh/custom/plugins/fzf-tab"
 clone_shallow https://github.com/tmux-plugins/tpm.git \
